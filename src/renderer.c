@@ -17,6 +17,11 @@ const char* fs = "#version 330 core\n"
                  "  FragColor = in_color;\n"
                  "}";
 
+Color_t
+color_Uniform(float r, float b, float g, float a, float divisor) {
+	return (Color_t){r / divisor, b / divisor, g / divisor, a / divisor};
+}
+
 struct Renderer
 renderer_Init(float win_x, float win_y) {
 	struct Shader flat;
@@ -55,7 +60,7 @@ renderer_Init(float win_x, float win_y) {
 }
 
 void
-renderer_DrawQuad(struct Renderer to_render, float x0, float y0, float x1, float y1, Color_t color) {
+renderer_DrawQuadBoundaries(struct Renderer to_render, float x0, float y0, float x1, float y1, Color_t color) {
 	float transform[4][4] = {{x1 - x0, 0, 0, x0}, {0, y1 - y0, 0, y0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
 	shader_Use(to_render.flat_color);
 
@@ -69,4 +74,9 @@ renderer_DrawQuad(struct Renderer to_render, float x0, float y0, float x1, float
 	glBindVertexArray(to_render.vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
+}
+
+void
+renderer_DrawQuad(struct Renderer to_render, float x, float y, float sx, float sy, Color_t color) {
+	renderer_DrawQuadBoundaries(to_render, x, y, sx + x, sy + y, color);
 }

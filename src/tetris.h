@@ -4,8 +4,9 @@
 
 #define PLAYFIELD_X 10
 #define PLAYFIELD_Y 40 // anything above line 20 is hidden
+#define PLAYFIELD_Y_MIN 20
 
-enum BlockColor { BLOCKCOLOR_EMPTY, BLOCKCOLOR_ORANGE, BLOCKCOLOR_BLUE };
+enum BlockColor { BLOCKCOLOR_EMPTY, BLOCKCOLOR_ORANGE, BLOCKCOLOR_BLUE, BLOCKCOLOR_MAX };
 
 struct Tetris {
 	uint8_t playfield[PLAYFIELD_X][PLAYFIELD_Y];
