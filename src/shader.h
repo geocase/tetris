@@ -2,9 +2,9 @@
 #define SHADER_H
 #include <stdbool.h>
 struct Shader {
-    unsigned int fragment;
-    unsigned int vertex;
-    unsigned int program;
+	unsigned int fragment;
+	unsigned int vertex;
+	unsigned int program;
 };
 bool shader_LoadFragmentShaderFromCharString(struct Shader* to_load_to, const char* to_load_from);
 bool shader_LoadVertexShaderFromCharString(struct Shader* to_load_to, const char* to_load_from);
