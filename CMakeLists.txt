@@ -5,7 +5,7 @@ include_directories(vendor/glad/include/)
 include_directories(vendor/glfw-3.3.4/include/)
 link_directories(vendor/glfw-3.3.4/lib-vc2019/)
 
-set(SOURCES src/main.c src/tetris.c src/shader.c src/renderer.c src/window.c)
+set(SOURCES src/main.c src/tetris.c src/shader.c src/renderer.c src/window.c src/painter.c)
 set(GLAD_SOURCES vendor/glad/src/glad.c)
 add_executable(tetris ${SOURCES} ${GLAD_SOURCES})
 set_property(TARGET tetris PROPERTY C_STANDARD 11)
