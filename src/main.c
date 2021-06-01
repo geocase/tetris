@@ -51,7 +51,7 @@ main() {
 			renderer_DrawQuadBoundaries(
 			    ren, 0, 0, (float)win.win_x, (float)win.win_y, color_Uniform(140, 140, 140, 255, 255));
 			
-			renderer_DrawLine(ren, 10.0f, 0, 0, win.win_x, win.win_y, color_Uniform(255, 0, 0, 1, 1));
+			renderer_DrawLine(ren, 1.0f, 0, 0, ((sinf(glfwGetTime()) + 1.0f) / 2.0f) * win.win_x, ((sinf(glfwGetTime() * 2) + 1.0f) / 2.0f) * win.win_y, color_Uniform(255, 0, 0, 1, 1));
 
 
 			paint_TetrisPlayfield(ren, game);
