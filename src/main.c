@@ -10,26 +10,33 @@
 #include "window.h"
 
 #define FRAME_LIMITING 1
-#define FRAMERATE 144
+#define FRAMERATE 30
 
 int
 main() {
 	srand(time(NULL));
 	struct Tetris game = tetris_Init();
+	struct Window win   = window_Init(800, 600, "tetris");
 	struct Renderer ren = renderer_Init(win.win_x, win.win_y);
 
 	double start_time = glfwGetTime();
+    double game_start_time = glfwGetTime();
 	while(window_Active(win)) {
 		glfwPollEvents();
-        for(int x = 0; x < PLAYFIELD_X; ++x) {
-	    	for(int y = 0; y < PLAYFIELD_Y; ++y) {
-		    	game.playfield[x][y] = rand() % BLOCKCOLOR_MAX;
-		    }
-	    }
+        double game_update_acc_time = glfwGetTime() - game_start_time;
+        if(game_update_acc_time > 1.0f) {
+            game_start_time = glfwGetTime();
+            for(int x = 0; x < PLAYFIELD_X; ++x) {
+                for(int y = 0; y < PLAYFIELD_Y; ++y) {
+                    game.playfield[x][y] = rand() % BLOCKCOLOR_MAX;
+                }
+            }
+        }
 
 		double acc_time = glfwGetTime() - start_time;
 #if FRAME_LIMITING
 		if(acc_time > 1.0f / FRAMERATE) {
+            start_time = glfwGetTime();
 #endif
 			renderer_DrawQuadBoundaries(ren, 0, 0, win.win_x, win.win_y, color_Uniform(140, 140, 140, 255, 255));
 
@@ -71,7 +78,6 @@ main() {
 				}
 			}
 			window_Update(win);
-			start_time = glfwGetTime();
             
 #if FRAME_LIMITING
 		}
