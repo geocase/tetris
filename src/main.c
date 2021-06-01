@@ -1,4 +1,3 @@
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,9 +9,18 @@
 #include "tetris.h"
 #include "window.h"
 
+#include <GLFW/glfw3.h>
+
+
 #define FRAME_LIMITING 1
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
+
+void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
+	if(action == GLFW_PRESS)
+		printf("%s\n", glfwGetKeyName(key, scancode));
+}
+
 
 int
 main() {
@@ -23,6 +31,8 @@ main() {
 
 	double start_time      = glfwGetTime();
 	double game_start_time = glfwGetTime();
+
+	glfwSetKeyCallback(win.window, key_callback);
 
 	while(window_Active(win)) {
 		glfwPollEvents();
