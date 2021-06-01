@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "window.h"
 struct Window
 window_Init(int window_size_x, int window_size_y, const char* window_title) {
