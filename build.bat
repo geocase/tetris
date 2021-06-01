@@ -1,1 +1,0 @@
-cl /DEBUG:FULL /Z7 src/main.c src/shader.c src/renderer.c src/window.c vendor/glad/src/glad.c -Ivendor\glfw-3.3.4\include\ -Ivendor\glad\include\ /Fo.\build\obj\ -o build\tetris.exe  /LIBPATH vendor\glfw-3.3.4\lib-vc2019\glfw3dll.lib /LINK 
