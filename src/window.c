@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include "window.h"
+#include <stdlib.h>
 struct Window
 window_Init(int window_size_x, int window_size_y, const char* window_title) {
 	glfwInit();
