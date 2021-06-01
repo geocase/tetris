@@ -15,13 +15,7 @@
 int
 main() {
 	srand(time(NULL));
-	struct Tetris game = {.score = 0, .level = 0};
-	for(int x = 0; x < PLAYFIELD_X; ++x) {
-		for(int y = 0; y < PLAYFIELD_Y; ++y) {
-			game.playfield[x][y] = rand() % BLOCKCOLOR_MAX;
-		}
-	}
-	struct Window win   = window_Init(800, 600, "win");
+	struct Tetris game = tetris_Init();
 	struct Renderer ren = renderer_Init(win.win_x, win.win_y);
 
 	double start_time = glfwGetTime();

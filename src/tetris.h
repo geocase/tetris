@@ -1,6 +1,7 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 #include <inttypes.h>
+#include "renderer.h"
 
 #define PLAYFIELD_X 10
 #define PLAYFIELD_Y 40 // anything above line 20 is hidden
@@ -12,6 +13,10 @@ struct Tetris {
 	uint8_t playfield[PLAYFIELD_X][PLAYFIELD_Y];
 	uint32_t score;
 	uint32_t level;
+
+	Color_t color_defs[BLOCKCOLOR_MAX];
 };
+
+struct Tetris tetris_Init();
 
 #endif
