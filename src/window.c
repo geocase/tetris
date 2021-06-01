@@ -25,10 +25,9 @@ window_Init(int window_size_x, int window_size_y, const char* window_title) {
 
 void
 window_Update(struct Window window_to_update) {
-	// glfwSwapBuffers(window_to_update.window); // Double buffering enabled only? 
-	// Should probably set a flag for double buffering later on.
-	glFlush();
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glFinish();
+	glfwSwapBuffers(window_to_update.window);
+	glClearColor(194.0f / 255.0f, 3.0f / 255.0f, 252.0f / 255.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
