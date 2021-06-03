@@ -25,22 +25,14 @@ tetris_Init(float game_time) {
 
 void
 tetris_Update(struct Tetris* to_update, float game_time) {
-	static int pos_x = 0;
-	static int pos_y = 19;
-
 	to_update->update_acc += game_time;
 	printf("%f\n", to_update->update_acc);
 	if(to_update->update_acc >= to_update->speed) {
 		printf("UPDATE\n");
 		to_update->update_acc                = 0.0f;
-		to_update->playfield[pos_y++][pos_x] = BLOCKCOLOR_EMPTY;
-		to_update->playfield[pos_y][pos_x]   = BLOCKCOLOR_ORANGE;
-		if(pos_y == PLAYFIELD_Y) {
-			pos_y = 19;
-			pos_x++;
-			if(pos_x == PLAYFIELD_X) {
-				pos_x = 0;
-			}
+		to_update->piece_y += 1;
+		if(to_update->piece_y + 3 >= PLAYFIELD_Y) {
+			to_update->piece_y = 25;
 		}
 	}
 }
