@@ -46,7 +46,9 @@ renderer_Init(float win_x, float win_y) {
 	         {0.0f, 0.0f, -2 / (far - near), -(far + near) / (far - near)},
 	         {0.0f, 0.0f, 0.0f, 1.0f}},
 	    .flat_color = flat,
-		.line_color = flat};
+		.line_color = flat,
+		.ren_x = win_x,
+		.ren_y = win_y};
 
 	float verts[] = {0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f};
 

@@ -9,6 +9,9 @@ typedef struct {
 Color_t color_Uniform(float r, float b, float g, float a, float divisor);
 
 struct Renderer {
+	float ren_x;
+	float ren_y;
+
 	float view_matrix[4][4];
 	struct Shader flat_color;
     struct Shader line_color;
