@@ -17,7 +17,7 @@ tetris_Init(float game_time) {
 	};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
-			t.playfield[x][y] = BLOCKCOLOR_EMPTY;
+			t.playfield[y][x] = BLOCKCOLOR_EMPTY;
 		}
 	}
 	return t;
@@ -33,8 +33,8 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 	if(to_update->update_acc >= to_update->speed) {
 		printf("UPDATE\n");
 		to_update->update_acc                = 0.0f;
-		to_update->playfield[pos_x][pos_y++] = BLOCKCOLOR_EMPTY;
-		to_update->playfield[pos_x][pos_y]   = BLOCKCOLOR_ORANGE;
+		to_update->playfield[pos_y++][pos_x] = BLOCKCOLOR_EMPTY;
+		to_update->playfield[pos_y][pos_x]   = BLOCKCOLOR_ORANGE;
 		if(pos_y == PLAYFIELD_Y) {
 			pos_y = 19;
 			pos_x++;

@@ -17,7 +17,7 @@ struct Tetrimino {
 };
 
 struct Tetris {
-	uint8_t playfield[PLAYFIELD_X][PLAYFIELD_Y];
+	uint8_t playfield[PLAYFIELD_Y][PLAYFIELD_X];
 	uint32_t score;
 	uint32_t level;
 
