@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <stdlib.h>
 
 #include "renderer.h"
 
@@ -15,6 +16,25 @@ const char* fs = "#version 330 core\n"
                  "uniform vec4 in_color;\n"
                  "void main() {\n"
                  "  FragColor = in_color;\n"
+                 "}";
+
+const char* tex_vs = "#version 330 core\n"
+                 "layout (location = 0) in vec2 a_pos;\n"
+                 "layout (location = 1) in vec2 a_tex_coord;\n"
+                 "uniform mat4 perspective;\n"
+                 "uniform mat4 transform;\n"
+				 "out vec2 tex_coord;\n"
+                 "void main() {\n"
+                 "    gl_Position = vec4(a_pos, 0.0, 1.0) * transform * perspective;\n"
+				 "    tex_coord = a_tex_coord;\n"
+                 "}";
+
+const char* tex_fs = "#version 330 core\n"
+                 "out vec4 FragColor;\n"
+                 "in vec2 tex_coord;\n"
+				 "uniform sampler2D in_texture;\n"
+                 "void main() {\n"
+                 "  FragColor = texture(in_texture, tex_coord);\n"
                  "}";
 
 Color_t
@@ -34,6 +54,11 @@ renderer_Init(float win_x, float win_y) {
 	shader_LoadVertexShaderFromCharString(&line, vs);
 	shader_GenerateProgram(&line);
 
+	struct Shader texture;
+	shader_LoadFragmentShaderFromCharString(&texture, tex_fs);
+	shader_LoadVertexShaderFromCharString(&texture, tex_vs);
+	shader_GenerateProgram(&texture);
+
 	// orthographic 2D matrix generation
 	float near = -1.0f, far = 1.0f;
 	float right = win_x, left = 0.0f;
@@ -46,6 +71,7 @@ renderer_Init(float win_x, float win_y) {
 	         {0.0f, 0.0f, 0.0f, 1.0f}},
 	    .flat_color = flat,
 	    .line_color = flat,
+		.texture_color = texture,
 	    .ren_x      = win_x,
 	    .ren_y      = win_y};
 
@@ -103,7 +129,27 @@ renderer_Init(float win_x, float win_y) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+
+
+	renderer_LoadTexture(&r);
+
 	return r;
+}
+
+void renderer_LoadTexture(struct Renderer* to_load_to) {
+	// gen 256 x 256 random image
+	unsigned char image[256 * 256 * 3];
+	for(int x = 0; x < 256 * 256 * 3; x++) {
+		image[x] = rand() % 255;
+	}
+
+	glGenTextures(1, &(to_load_to->texture_index));
+	glBindTexture(GL_TEXTURE_2D, to_load_to->texture_index);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
 }
 
 void
@@ -126,6 +172,22 @@ renderer_DrawQuadBoundaries(struct Renderer to_render, float x0, float y0, float
 void
 renderer_DrawQuad(struct Renderer to_render, float x, float y, float sx, float sy, Color_t color) {
 	renderer_DrawQuadBoundaries(to_render, x, y, sx + x, sy + y, color);
+}
+
+void
+renderer_DrawTextureBoundaries(struct Renderer to_render, float x0, float y0, float x1, float y1, unsigned int texture) {
+	float transform[4][4] = {{x1 - x0, 0, 0, x0}, {0, y1 - y0, 0, y0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+	shader_Use(to_render.texture_color);
+
+	int view         = glGetUniformLocation(to_render.texture_color.program, "perspective");
+	int tform        = glGetUniformLocation(to_render.texture_color.program, "transform");
+	// int tex = glGetUniformLocation(to_render.texture_color.program, "in_texture");
+	glUniformMatrix4fv(view, 1, GL_FALSE, (float*)to_render.view_matrix);
+	glUniformMatrix4fv(tform, 1, GL_FALSE, (float*)transform);
+	glBindTexture(GL_TEXTURE_2D, to_render.texture_index);
+	glBindVertexArray(to_render.texture_vao);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 }
 
 void

@@ -17,6 +17,9 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 	    border_padding + block_size * PLAYFIELD_Y_MIN + y_offset * PLAYFIELD_Y_MIN + (border_padding - y_offset),
 	    color_Normal(0, 0, 0, 255, 255));
 
+	// remove later! testing only!
+	renderer_DrawTextureBoundaries(render_with, 0, 0, 800, 600, 0);
+
 	for(int y = PLAYFIELD_Y_MIN; y < PLAYFIELD_Y; ++y) {
 		for(int x = 0; x < PLAYFIELD_X; ++x) {
 			float x_start_pos = x_padding + (block_size * x) + (x * x_offset);
