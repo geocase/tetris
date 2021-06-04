@@ -18,6 +18,7 @@ struct Renderer {
 
 	unsigned int quad_vao;
 	unsigned int line_vao;
+	unsigned int texture_vao;
 };
 struct Renderer renderer_Init(float win_x, float win_y);
 void renderer_DrawQuadBoundaries(struct Renderer to_render, float x0, float y0, float x1, float y1, Color_t color);
