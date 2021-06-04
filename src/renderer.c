@@ -18,7 +18,7 @@ const char* fs = "#version 330 core\n"
                  "}";
 
 Color_t
-color_Uniform(float r, float b, float g, float a, float divisor) {
+color_Normal(float r, float b, float g, float a, float divisor) {
 	return (Color_t){r / divisor, b / divisor, g / divisor, a / divisor};
 }
 

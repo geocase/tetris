@@ -8,11 +8,11 @@
 #define PLAYFIELD_Y_MIN 20
 
 enum BlockColor { BLOCKCOLOR_EMPTY, BLOCKCOLOR_ORANGE, BLOCKCOLOR_BLUE, BLOCKCOLOR_MAX };
-enum BlockType {BT_I, BT_O, BT_T, BT_S, BT_Z, BT_J, BT_L, BT_MAX, BT_EMPTY};
+enum BlockType { BT_I, BT_O, BT_T, BT_S, BT_Z, BT_J, BT_L, BT_MAX, BT_EMPTY };
 
 struct Tetrimino {
 	unsigned int type;
-    bool grid[4][4];
+	bool grid[4][4];
 	int rotation;
 };
 
@@ -26,7 +26,7 @@ struct Tetris {
 	float update_acc;
 	float speed;
 
-	int piece_x, piece_y; // top left justified. 
+	int piece_x, piece_y; // top left justified.
 	struct Tetrimino current_piece;
 };
 

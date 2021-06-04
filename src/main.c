@@ -11,16 +11,15 @@
 
 #include <GLFW/glfw3.h>
 
-
 #define FRAME_LIMITING 1
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
 
-void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
+void
+key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
 	if(action == GLFW_PRESS)
 		printf("%s\n", glfwGetKeyName(key, scancode));
 }
-
 
 int
 main() {
@@ -49,8 +48,8 @@ main() {
 #endif
 
 			renderer_DrawQuadBoundaries(
-			    ren, 0, 0, (float)win.win_x, (float)win.win_y, color_Uniform(140, 140, 140, 255, 255));
-			
+			    ren, 0, 0, (float)win.win_x, (float)win.win_y, color_Normal(140, 140, 140, 255, 255));
+
 			paint_TetrisPlayfield(ren, game);
 			window_Update(win);
 
