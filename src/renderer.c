@@ -34,7 +34,6 @@ renderer_Init(float win_x, float win_y) {
 	shader_LoadVertexShaderFromCharString(&line, vs);
 	shader_GenerateProgram(&line);
 
-
 	// orthographic 2D matrix generation
 	float near = -1.0f, far = 1.0f;
 	float right = win_x, left = 0.0f;
@@ -46,9 +45,9 @@ renderer_Init(float win_x, float win_y) {
 	         {0.0f, 0.0f, -2 / (far - near), -(far + near) / (far - near)},
 	         {0.0f, 0.0f, 0.0f, 1.0f}},
 	    .flat_color = flat,
-		.line_color = flat,
-		.ren_x = win_x,
-		.ren_y = win_y};
+	    .line_color = flat,
+	    .ren_x      = win_x,
+	    .ren_y      = win_y};
 
 	float verts[] = {0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f};
 
@@ -65,10 +64,8 @@ renderer_Init(float win_x, float win_y) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	float line_verts[] ={
-		0.0f, 0.0f, 1.0f, 1.0f
-	};
-	
+	float line_verts[] = {0.0f, 0.0f, 1.0f, 1.0f};
+
 	glGenVertexArrays(1, &(r.line_vao));
 	glBindVertexArray(r.line_vao);
 
@@ -106,12 +103,12 @@ renderer_DrawQuad(struct Renderer to_render, float x, float y, float sx, float s
 	renderer_DrawQuadBoundaries(to_render, x, y, sx + x, sy + y, color);
 }
 
-void 
+void
 renderer_DrawLine(struct Renderer to_render, float line_width, float x0, float y0, float x1, float y1, Color_t color) {
 	float transform[4][4] = {{x1 - x0, 0, 0, x0}, {0, y1 - y0, 0, y0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
-	int vertex_color = glGetUniformLocation(to_render.flat_color.program, "in_color");
-	int view         = glGetUniformLocation(to_render.flat_color.program, "perspective");
-	int tform        = glGetUniformLocation(to_render.flat_color.program, "transform");
+	int vertex_color      = glGetUniformLocation(to_render.flat_color.program, "in_color");
+	int view              = glGetUniformLocation(to_render.flat_color.program, "perspective");
+	int tform             = glGetUniformLocation(to_render.flat_color.program, "transform");
 
 	glUniform4f(vertex_color, color.r, color.g, color.b, color.a);
 	glUniformMatrix4fv(view, 1, GL_FALSE, (float*)to_render.view_matrix);
