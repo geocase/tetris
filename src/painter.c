@@ -5,11 +5,11 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 	// remove later! testing only!
 	renderer_DrawTexture(render_with, 0, 0, 800, 600, 0);
 
-	float x_padding  = 100;
-	float x_offset   = 2;
-	float y_padding  = 40;
-	float y_offset   = 2;
-	float block_size = 20;
+	float x_padding      = 100;
+	float x_offset       = 2;
+	float y_padding      = 40;
+	float y_offset       = 2;
+	float block_size     = 20;
 	float border_padding = 10;
 
 	renderer_DrawQuad(
@@ -19,7 +19,6 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 	    border_padding + block_size * PLAYFIELD_X + x_offset * PLAYFIELD_X + (border_padding - x_offset),
 	    border_padding + block_size * PLAYFIELD_Y_MIN + y_offset * PLAYFIELD_Y_MIN + (border_padding - y_offset),
 	    color_Normal(0, 0, 0, 255, 255));
-
 
 	for(int y = PLAYFIELD_Y_MIN; y < PLAYFIELD_Y; ++y) {
 		for(int x = 0; x < PLAYFIELD_X; ++x) {
