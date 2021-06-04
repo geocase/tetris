@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1.0)
 project(tetris)
 
 include_directories(vendor/glad/include/)
+include_directories(vendor/stb/)
 include_directories(vendor/glfw-3.3.4/include/)
 link_directories(vendor/glfw-3.3.4/lib-vc2019/)
 

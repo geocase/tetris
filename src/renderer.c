@@ -1,6 +1,9 @@
 #include <glad/glad.h>
 #include <stdlib.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+
 #include "renderer.h"
 
 const char* vs = "#version 330 core\n"
@@ -131,24 +134,27 @@ renderer_Init(float win_x, float win_y) {
 
 
 
-	renderer_LoadTexture(&r);
+	renderer_LoadTexture(&r, "epic.jpg");
 
 	return r;
 }
 
-void renderer_LoadTexture(struct Renderer* to_load_to) {
-	// gen 256 x 256 random image
-	unsigned char image[256 * 256 * 3];
-	for(int x = 0; x < 256 * 256 * 3; x++) {
-		image[x] = rand() % 255;
-	}
+unsigned int
+renderer_LoadTexture(struct Renderer* to_load_to, const char* path) {
 
 	glGenTextures(1, &(to_load_to->texture_index));
 	glBindTexture(GL_TEXTURE_2D, to_load_to->texture_index);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
+	// load texture
+	int width, height, nr_channels;
+	unsigned char* image = stbi_load(path, &width, &height, &nr_channels, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(image);
+
+	return to_load_to->texture_index;
 
 }
 

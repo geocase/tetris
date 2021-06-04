@@ -26,7 +26,7 @@ struct Renderer {
 
 struct Renderer renderer_Init(float win_x, float win_y);
 
-void renderer_LoadTexture(struct Renderer* to_load_to);
+unsigned int renderer_LoadTexture(struct Renderer* to_load_to);
 void renderer_DrawQuadBoundaries(struct Renderer to_render, float x0, float y0, float x1, float y1, Color_t color);
 void renderer_DrawQuad(struct Renderer to_render, float x, float y, float sx, float sy, Color_t color);
 
