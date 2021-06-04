@@ -36,8 +36,6 @@ unsigned int renderer_LoadTexture(struct Renderer* to_load_to, const char* path)
 
 void renderer_DrawQuadBoundaries(struct Renderer to_render, float x0, float y0, float x1, float y1, Color_t color);
 void renderer_DrawQuad(struct Renderer to_render, float x, float y, float sx, float sy, Color_t color);
-void
-renderer_DrawTextureBoundaries(struct Renderer to_render, float x0, float y0, float x1, float y1, unsigned int texture);
 void renderer_DrawTextureBoundariesWithRepeat(
     struct Renderer to_render,
     float x0,
