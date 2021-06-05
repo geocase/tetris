@@ -1,5 +1,73 @@
 #include "tetris.h"
 
+// clang-format off
+struct Tetrimino tetrimino_defs[BT_MAX] = {
+	{
+		.type = BT_I,
+		.grid = {
+			{0, 1, 0, 0},
+			{0, 1, 0, 0},
+			{0, 1, 0, 0},
+			{0, 1, 0, 0},
+		},
+	},
+	{
+		.type = BT_O,
+		.grid = {
+			{1, 1, 0, 0},
+			{1, 1, 0, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
+		},
+	},
+	{
+		.type = BT_T,
+		.grid = {
+			{1, 1, 1, 0},
+			{0, 1, 0, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
+		},
+	},
+	{
+		.type = BT_S,
+		.grid = {
+			{0, 1, 1, 0},
+			{1, 1, 0, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
+		},
+	},
+	{
+		.type = BT_Z,
+		.grid = {
+			{1, 1, 0, 0},
+			{0, 1, 1, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
+		},
+	},
+	{
+		.type = BT_J,
+		.grid = {
+			{0, 1, 0, 0},
+			{0, 1, 0, 0},
+			{1, 1, 0, 0},
+			{0, 0, 0, 0},
+		},
+	},
+	{
+		.type = BT_L,
+		.grid = {
+			{0, 1, 0, 0},
+			{0, 1, 0, 0},
+			{0, 1, 1, 0},
+			{0, 0, 0, 0},
+		},
+	},
+};
+// clang-format on
+
 struct Tetris
 tetris_Init(float game_time) {
 	struct Tetris t = {
@@ -13,7 +81,7 @@ tetris_Init(float game_time) {
 	    .speed         = 1.0f, // once per second to start
 	    .piece_x       = 3,
 	    .piece_y       = 25,
-	    .current_piece = tetrimino_Init()};
+	    .current_piece = tetrimino_Init(BT_L)};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
 			t.playfield[y][x] = BLOCKCOLOR_EMPTY;
@@ -31,7 +99,7 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 
 		tetrimino_Rotate(&(to_update->current_piece));
 		to_update->update_acc = 0.0f;
-		to_update->piece_y += 1;
+		// to_update->piece_y += 1;
 		if(to_update->piece_y + 3 >= PLAYFIELD_Y) {
 			to_update->piece_y = 25;
 		}
@@ -39,28 +107,23 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 }
 
 struct Tetrimino
-tetrimino_Init() {
-	struct Tetrimino t = {
-	    .type = BT_T,
-		.grid = {
-			{1, 1, 1, 0},
-			{0, 1, 0, 0}, 
-			{0, 0, 0, 0}, 
-			{0, 0, 0, 0}
-		},
-		.rotation = 0};
-	return t;
+tetrimino_Init(unsigned int block_type) {
+	return tetrimino_defs[block_type];
 }
 
 static void
 swap_bool(bool* a, bool* b) {
 	bool c = *a;
-	*a = *b;
-	*b = c;
+	*a     = *b;
+	*b     = c;
 }
 
 void
 tetrimino_Rotate(struct Tetrimino* to_rotate) {
+	if(to_rotate->type == BT_O) {
+		return;
+	}
+
 	int edge = 3;
 	if(to_rotate->type != BT_I) {
 		--edge;
@@ -80,13 +143,11 @@ tetrimino_Rotate(struct Tetrimino* to_rotate) {
 		swap_bool(&(to_rotate->grid[0][2]), &(to_rotate->grid[3][1]));
 		swap_bool(&(to_rotate->grid[0][2]), &(to_rotate->grid[1][0]));
 
-
 		// inner
 		swap_bool(&(to_rotate->grid[1][1]), &(to_rotate->grid[1][2]));
 		swap_bool(&(to_rotate->grid[1][1]), &(to_rotate->grid[2][2]));
 		swap_bool(&(to_rotate->grid[1][1]), &(to_rotate->grid[2][1]));
 	}
-
 
 	for(int y = 0; y < 4; ++y) {
 		for(int x = 0; x < 4; ++x) {
@@ -94,5 +155,4 @@ tetrimino_Rotate(struct Tetrimino* to_rotate) {
 		}
 		printf("\n");
 	}
-	
 }

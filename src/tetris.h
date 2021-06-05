@@ -10,6 +10,9 @@
 enum BlockColor { BLOCKCOLOR_EMPTY, BLOCKCOLOR_ORANGE, BLOCKCOLOR_BLUE, BLOCKCOLOR_MAX };
 enum BlockType { BT_I, BT_O, BT_T, BT_S, BT_Z, BT_J, BT_L, BT_MAX, BT_EMPTY };
 
+
+extern struct Tetrimino tetrimino_defs[BT_MAX];
+
 struct Tetrimino {
 	unsigned int type;
 	bool grid[4][4];
