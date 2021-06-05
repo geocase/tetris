@@ -28,6 +28,8 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 	printf("%f\n", to_update->update_acc);
 	if(to_update->update_acc >= to_update->speed) {
 		printf("UPDATE\n");
+
+		tetrimino_Rotate(&(to_update->current_piece));
 		to_update->update_acc = 0.0f;
 		to_update->piece_y += 1;
 		if(to_update->piece_y + 3 >= PLAYFIELD_Y) {
@@ -39,12 +41,58 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 struct Tetrimino
 tetrimino_Init() {
 	struct Tetrimino t = {
-	    .type = BT_I, .grid = {{0, 1, 0, 0}, {0, 1, 0, 0}, {0, 1, 0, 0}, {0, 1, 0, 0}}, .rotation = 0};
+	    .type = BT_T,
+		.grid = {
+			{1, 1, 1, 0},
+			{0, 1, 0, 0}, 
+			{0, 0, 0, 0}, 
+			{0, 0, 0, 0}
+		},
+		.rotation = 0};
 	return t;
+}
+
+static void
+swap_bool(bool* a, bool* b) {
+	bool c = *a;
+	*a = *b;
+	*b = c;
 }
 
 void
 tetrimino_Rotate(struct Tetrimino* to_rotate) {
-	struct Tetrimino temp = {
-	    .type = to_rotate->type, .grid = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, .rotation = 0};
+	int edge = 3;
+	if(to_rotate->type != BT_I) {
+		--edge;
+	}
+	// hacky and GROSS ICKY BLEH!
+	// outer
+	swap_bool(&(to_rotate->grid[0][0]), &(to_rotate->grid[0][edge]));
+	swap_bool(&(to_rotate->grid[0][0]), &(to_rotate->grid[edge][edge]));
+	swap_bool(&(to_rotate->grid[0][0]), &(to_rotate->grid[edge][0]));
+
+	swap_bool(&(to_rotate->grid[0][1]), &(to_rotate->grid[1][edge]));
+	swap_bool(&(to_rotate->grid[0][1]), &(to_rotate->grid[edge][edge - 1]));
+	swap_bool(&(to_rotate->grid[0][1]), &(to_rotate->grid[edge - 1][0]));
+
+	if(to_rotate->type == BT_I) {
+		swap_bool(&(to_rotate->grid[0][2]), &(to_rotate->grid[2][3]));
+		swap_bool(&(to_rotate->grid[0][2]), &(to_rotate->grid[3][1]));
+		swap_bool(&(to_rotate->grid[0][2]), &(to_rotate->grid[1][0]));
+
+
+		// inner
+		swap_bool(&(to_rotate->grid[1][1]), &(to_rotate->grid[1][2]));
+		swap_bool(&(to_rotate->grid[1][1]), &(to_rotate->grid[2][2]));
+		swap_bool(&(to_rotate->grid[1][1]), &(to_rotate->grid[2][1]));
+	}
+
+
+	for(int y = 0; y < 4; ++y) {
+		for(int x = 0; x < 4; ++x) {
+			printf("%d", to_rotate->grid[y][x]);
+		}
+		printf("\n");
+	}
+	
 }
