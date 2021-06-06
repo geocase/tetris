@@ -15,16 +15,19 @@
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
 
+struct Tetris game;
+
 void
 key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
-	if(action == GLFW_PRESS)
-		printf("%s\n", glfwGetKeyName(key, scancode));
+	game.rotate_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_UP);
+	game.left_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_LEFT);
+	game.right_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_RIGHT);
 }
 
 int
 main() {
 	srand((unsigned int)time(NULL));
-	struct Tetris game  = tetris_Init(glfwGetTime());
+	game  = tetris_Init(glfwGetTime());
 	struct Window win   = window_Init(800, 600, "tetris");
 	struct Renderer ren = renderer_Init((float)win.win_x, (float)win.win_y);
 

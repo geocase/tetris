@@ -71,6 +71,10 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 struct Tetris
 tetris_Init(float game_time) {
 	struct Tetris t = {
+		.rotate_key = {
+			.is_pressed = false,
+			.just_pressed  = false,
+		},
 	    .score = 0,
 	    .level = 0,
 	    .color_defs =
@@ -90,21 +94,95 @@ tetris_Init(float game_time) {
 	return t;
 }
 
+static bool
+tetris_MoveOkay(struct Tetris* to_check, int x_check, int y_check) {
+	for(int y = 0; y < 4; y++) {
+		for(int x = 0; x < 4; ++x) {
+			if(to_check->current_piece.grid[y][x]) {
+				if(y + to_check->piece_y + y_check >= PLAYFIELD_Y || y + to_check->piece_y + y_check < 0) {
+				return false;
+				}
+				if(x + to_check->piece_x + x_check >= PLAYFIELD_X || x + to_check->piece_x + x_check < 0) {
+					return false;
+				}
+				if(to_check->playfield[y + to_check->piece_y + y_check][x + to_check->piece_x + x_check] != BLOCKCOLOR_EMPTY) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+static bool
+tetris_StampPiece(struct Tetris* to_be_stamped_on) {
+	for(int y = 0; y < 4; y++) {
+		for(int x = 0; x < 4; ++x) {
+			if(to_be_stamped_on->current_piece.grid[y][x]) {
+				to_be_stamped_on->playfield[y + to_be_stamped_on->piece_y][x + to_be_stamped_on->piece_x] = BLOCKCOLOR_BLUE;
+			}
+		}
+	}
+	return true;
+}
+
 void
 tetris_Update(struct Tetris* to_update, float game_time) {
+	// for(int x = 0; x < PLAYFIELD_X; ++x) {
+	// 	to_update->playfield[39][x] = BLOCKCOLOR_BLUE;
+	// }
+	if(to_update->rotate_key.just_pressed) {
+		if(!to_update->rotate_key.is_pressed) {
+			tetrimino_Rotate(&(to_update->current_piece));
+			if(!tetris_MoveOkay(to_update, 0, 0)) {
+				tetrimino_Rotate(&(to_update->current_piece));
+				tetrimino_Rotate(&(to_update->current_piece));
+				tetrimino_Rotate(&(to_update->current_piece));
+
+			}
+			to_update->rotate_key.is_pressed = true;
+		}
+	} else {
+		to_update->rotate_key.is_pressed = false;
+	}
+
+	if(to_update->left_key.just_pressed) {
+		if(!to_update->left_key.is_pressed) {
+			if(tetris_MoveOkay(to_update, -1, 0)) {
+				to_update->piece_x -= 1;
+			}
+			to_update->left_key.is_pressed = true;
+		}
+	} else {
+		to_update->left_key.is_pressed = false;
+	}
+
+	if(to_update->right_key.just_pressed) {
+		if(!to_update->right_key.is_pressed) {
+			if(tetris_MoveOkay(to_update, 1, 0)) {
+				to_update->piece_x += 1;
+			}
+			to_update->right_key.is_pressed = true;
+		}
+	} else {
+		to_update->right_key.is_pressed = false;
+	}
+
 	to_update->update_acc += game_time;
-	printf("%f\n", to_update->update_acc);
 	if(to_update->update_acc >= to_update->speed) {
 		printf("UPDATE\n");
 
-		tetrimino_Rotate(&(to_update->current_piece));
 		to_update->update_acc = 0.0f;
-		// to_update->piece_y += 1;
-		if(to_update->piece_y + 3 >= PLAYFIELD_Y) {
+		if(tetris_MoveOkay(to_update, 0, 1)) {
+			to_update->piece_y += 1;
+		} else {
+			tetris_StampPiece(to_update);
 			to_update->piece_y = 25;
 		}
 	}
 }
+
+
 
 struct Tetrimino
 tetrimino_Init(unsigned int block_type) {
