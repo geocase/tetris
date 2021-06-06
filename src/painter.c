@@ -4,6 +4,7 @@ void
 paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from) {
 	// remove later! testing only!
 	renderer_DrawTexture(render_with, 0, 0, 800, 600, 0);
+	
 
 	float x_padding      = 100;
 	float x_offset       = 2;
@@ -42,4 +43,8 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 	float normal = to_render_from.update_acc / to_render_from.speed;
 
 	renderer_DrawQuad(render_with, 0, 0, normal * render_with.ren_x, 20, color_Normal(1 - normal, 0, normal, 1, 1));
+
+	if(to_render_from.game_lost) {
+		renderer_DrawTexture(render_with, 0, 0, 800, 600, 1);
+	}
 }
