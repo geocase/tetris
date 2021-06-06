@@ -130,27 +130,34 @@ renderer_Init(float win_x, float win_y) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	renderer_LoadTexture(&r, "64x64.png");
+	r.textures[0] = renderer_LoadTexture(&r, "64x64.png");
+	r.textures[1] = renderer_LoadTexture(&r, "game_over.png");
 
 	return r;
 }
 
-unsigned int
+Texture_t
 renderer_LoadTexture(struct Renderer* to_load_to, const char* path) {
+	Texture_t tex;
 
-	glGenTextures(1, &(to_load_to->texture_index));
-	glBindTexture(GL_TEXTURE_2D, to_load_to->texture_index);
+	glGenTextures(1, &(tex.index));
+	glBindTexture(GL_TEXTURE_2D, tex.index);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// load texture
-	int width, height, nr_channels;
-	unsigned char* image = stbi_load(path, &width, &height, &nr_channels, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	int nr_channels;
+	unsigned char* image = stbi_load(path, &(tex.size_x), &(tex.size_y), &nr_channels, 0);
+	if(nr_channels == 3) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex.size_x, tex.size_y, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	} else {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.size_x, tex.size_y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+	}
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(image);
 
-	return to_load_to->texture_index;
+	return tex;
 }
 
 void
@@ -194,7 +201,7 @@ renderer_DrawTextureBoundariesWithRepeat(
 	glUniformMatrix4fv(view, 1, GL_FALSE, (float*)to_render.view_matrix);
 	glUniformMatrix4fv(tform, 1, GL_FALSE, (float*)transform);
 	glUniform2f(repeat, repeat_x, repeat_y);
-	glBindTexture(GL_TEXTURE_2D, to_render.texture_index);
+	glBindTexture(GL_TEXTURE_2D, to_render.textures[texture].index);
 	glBindVertexArray(to_render.texture_vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
