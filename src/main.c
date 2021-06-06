@@ -22,6 +22,7 @@ key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
 	game.rotate_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_UP);
 	game.left_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_LEFT);
 	game.right_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_RIGHT);
+	game.hard_drop_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_DOWN);
 }
 
 int

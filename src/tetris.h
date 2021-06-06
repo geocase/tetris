@@ -28,6 +28,7 @@ struct Tetris {
 	Keypress_t rotate_key;
 	Keypress_t left_key;
 	Keypress_t right_key;
+	Keypress_t hard_drop_key;
 	uint8_t playfield[PLAYFIELD_Y][PLAYFIELD_X];
 	uint32_t score;
 	uint32_t level;
