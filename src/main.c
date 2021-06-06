@@ -11,7 +11,7 @@
 
 #include <GLFW/glfw3.h>
 
-#define FRAME_LIMITING 0
+#define FRAME_LIMITING 1
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
 

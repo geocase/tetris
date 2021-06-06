@@ -81,10 +81,12 @@ tetris_Init(float game_time) {
 	         color_Normal(255, 122, 33, 255, 255),
 	         color_Normal(0, 0, 255, 255, 255)},
 	    .update_acc    = 0,
-	    .speed         = .5f, // once per second to start
+	    .speed         = .1f, // once per second to start
 	    .piece_x       = 3,
 	    .piece_y       = 20,
-	    .current_piece = tetrimino_Init(rand() % BT_MAX)};
+	    .current_piece = tetrimino_Init(rand() % BT_MAX),
+		.game_lost = false
+	};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
 			t.playfield[y][x] = BLOCKCOLOR_EMPTY;
@@ -129,6 +131,10 @@ tetris_StampPiece(struct Tetris* to_be_stamped_on) {
 
 void
 tetris_Update(struct Tetris* to_update, float game_time) {
+	if(to_update->game_lost) {
+		return;
+	}
+
 	if(to_update->rotate_key.just_pressed) {
 		if(!to_update->rotate_key.is_pressed) {
 			tetrimino_Rotate(&(to_update->current_piece));
@@ -179,8 +185,6 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 
 	to_update->update_acc += game_time;
 	if(to_update->update_acc >= to_update->speed || to_update->hard_dropped) {
-		printf("UPDATE\n");
-
 		to_update->update_acc = 0.0f;
 		if(tetris_MoveOkay(to_update, 0, 1)) {
 			to_update->piece_y += 1;
@@ -189,6 +193,9 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			to_update->piece_y       = 20;
 			to_update->piece_x       = 3;
 			to_update->current_piece = tetrimino_Init(rand() % BT_MAX);
+			if(!(tetris_MoveOkay(to_update, 0, 0))) {
+				to_update->game_lost = true;
+			}
 		}
 		to_update->hard_dropped = false;
 	}

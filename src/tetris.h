@@ -40,6 +40,7 @@ struct Tetris {
 
 	int piece_x, piece_y; // top left justified.
 	struct Tetrimino current_piece;
+	bool game_lost;
 };
 
 struct Tetris tetris_Init(float game_time);
