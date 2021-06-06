@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "tetris.h"
 
 // clang-format off
@@ -101,7 +104,8 @@ tetris_MoveOkay(struct Tetris* to_check, int x_check, int y_check) {
 				if(x + to_check->piece_x + x_check >= PLAYFIELD_X || x + to_check->piece_x + x_check < 0) {
 					return false;
 				}
-				if(to_check->playfield[y + to_check->piece_y + y_check][x + to_check->piece_x + x_check] != BLOCKCOLOR_EMPTY) {
+				if(to_check->playfield[y + to_check->piece_y + y_check][x + to_check->piece_x + x_check] !=
+				   BLOCKCOLOR_EMPTY) {
 					return false;
 				}
 			}
@@ -115,7 +119,8 @@ tetris_StampPiece(struct Tetris* to_be_stamped_on) {
 	for(int y = 0; y < 4; y++) {
 		for(int x = 0; x < 4; ++x) {
 			if(to_be_stamped_on->current_piece.grid[y][x]) {
-				to_be_stamped_on->playfield[y + to_be_stamped_on->piece_y][x + to_be_stamped_on->piece_x] = BLOCKCOLOR_BLUE;
+				to_be_stamped_on->playfield[y + to_be_stamped_on->piece_y][x + to_be_stamped_on->piece_x] =
+				    BLOCKCOLOR_BLUE;
 			}
 		}
 	}
@@ -124,9 +129,6 @@ tetris_StampPiece(struct Tetris* to_be_stamped_on) {
 
 void
 tetris_Update(struct Tetris* to_update, float game_time) {
-	// for(int x = 0; x < PLAYFIELD_X; ++x) {
-	// 	to_update->playfield[39][x] = BLOCKCOLOR_BLUE;
-	// }
 	if(to_update->rotate_key.just_pressed) {
 		if(!to_update->rotate_key.is_pressed) {
 			tetrimino_Rotate(&(to_update->current_piece));
@@ -134,7 +136,6 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 				tetrimino_Rotate(&(to_update->current_piece));
 				tetrimino_Rotate(&(to_update->current_piece));
 				tetrimino_Rotate(&(to_update->current_piece));
-
 			}
 			to_update->rotate_key.is_pressed = true;
 		}
@@ -147,7 +148,7 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			while(tetris_MoveOkay(to_update, 0, 1)) {
 				to_update->piece_y++;
 			}
-
+			to_update->hard_dropped             = true;
 			to_update->hard_drop_key.is_pressed = true;
 		}
 	} else {
@@ -177,7 +178,7 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 	}
 
 	to_update->update_acc += game_time;
-	if(to_update->update_acc >= to_update->speed) {
+	if(to_update->update_acc >= to_update->speed || to_update->hard_dropped) {
 		printf("UPDATE\n");
 
 		to_update->update_acc = 0.0f;
@@ -185,10 +186,11 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			to_update->piece_y += 1;
 		} else {
 			tetris_StampPiece(to_update);
-			to_update->piece_y = 20;
-			to_update->piece_x = 3;
+			to_update->piece_y       = 20;
+			to_update->piece_x       = 3;
 			to_update->current_piece = tetrimino_Init(rand() % BT_MAX);
 		}
+		to_update->hard_dropped = false;
 	}
 
 	bool row_cleared[PLAYFIELD_Y_MIN];
@@ -213,14 +215,13 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			}
 			for(int above = i; above > 0; above--) {
 				for(int above_x = 0; above_x < PLAYFIELD_X; ++above_x) {
-					to_update->playfield[above + PLAYFIELD_Y_MIN][above_x] = to_update->playfield[above - 1 + PLAYFIELD_Y_MIN][above_x];
+					to_update->playfield[above + PLAYFIELD_Y_MIN][above_x] =
+					    to_update->playfield[above - 1 + PLAYFIELD_Y_MIN][above_x];
 				}
 			}
 		}
 	}
 }
-
-
 
 struct Tetrimino
 tetrimino_Init(unsigned int block_type) {

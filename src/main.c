@@ -11,7 +11,7 @@
 
 #include <GLFW/glfw3.h>
 
-#define FRAME_LIMITING 1
+#define FRAME_LIMITING 0
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
 
@@ -19,16 +19,16 @@ struct Tetris game;
 
 void
 key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
-	game.rotate_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_UP);
-	game.left_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_LEFT);
-	game.right_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_RIGHT);
-	game.hard_drop_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_DOWN);
+	game.rotate_key.just_pressed    = (action == GLFW_PRESS && key == GLFW_KEY_SPACE);
+	game.left_key.just_pressed      = (action == GLFW_PRESS && key == GLFW_KEY_LEFT);
+	game.right_key.just_pressed     = (action == GLFW_PRESS && key == GLFW_KEY_RIGHT);
+	game.hard_drop_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_UP);
 }
 
 int
 main() {
 	srand((unsigned int)time(NULL));
-	game  = tetris_Init(glfwGetTime());
+	game                = tetris_Init((float)glfwGetTime());
 	struct Window win   = window_Init(800, 600, "tetris");
 	struct Renderer ren = renderer_Init((float)win.win_x, (float)win.win_y);
 

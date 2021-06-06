@@ -10,7 +10,6 @@
 enum BlockColor { BLOCKCOLOR_EMPTY, BLOCKCOLOR_ORANGE, BLOCKCOLOR_BLUE, BLOCKCOLOR_MAX };
 enum BlockType { BT_I, BT_O, BT_T, BT_S, BT_Z, BT_J, BT_L, BT_MAX, BT_EMPTY };
 
-
 extern struct Tetrimino tetrimino_defs[BT_MAX];
 
 struct Tetrimino {
@@ -29,6 +28,7 @@ struct Tetris {
 	Keypress_t left_key;
 	Keypress_t right_key;
 	Keypress_t hard_drop_key;
+	bool hard_dropped;
 	uint8_t playfield[PLAYFIELD_Y][PLAYFIELD_X];
 	uint32_t score;
 	uint32_t level;
