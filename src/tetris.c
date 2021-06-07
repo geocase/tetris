@@ -281,8 +281,10 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			break;
 		case 3:
 			score_update = 5;
+			break;
 		case 4:
 			score_update = 8;
+			break;
 		default:
 			score_update = 0;
 			break;
