@@ -3,6 +3,10 @@ project(tetris)
 
 include_directories(vendor/glad/include/)
 include_directories(vendor/stb/)
+
+include_directories(vendor/freetype-2.10.4/include)
+link_directories(vendor/freetype-2.10.4/win64/)
+
 include_directories(vendor/glfw-3.3.4/include/)
 link_directories(vendor/glfw-3.3.4/lib-vc2019/)
 
@@ -12,7 +16,7 @@ add_executable(tetris ${SOURCES} ${GLAD_SOURCES})
 set_property(TARGET tetris PROPERTY C_STANDARD 11)
 if(WIN32)
     target_compile_options(tetris PRIVATE -DEBUG)
-    target_link_libraries(tetris glfw3dll)
+    target_link_libraries(tetris glfw3dll freetype)
 endif(WIN32)
 if(UNIX)
     target_compile_options(tank PRIVATE -g)

@@ -263,7 +263,7 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			break;
 	}
 	to_update->lines_cleared += score_update;
-	printf("LINES_CLEARED %d SCORE UPDATE %d\n", to_update->lines_cleared, score_update);
+	// printf("LINES_CLEARED %d SCORE UPDATE %d\n", to_update->lines_cleared, score_update);
 
 	if(to_update->lines_cleared >= to_update->level * 5) {
 		tetris_LevelUp(to_update);

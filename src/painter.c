@@ -1,4 +1,5 @@
 #include "painter.h"
+#include <stdio.h>
 
 void
 paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from) {
@@ -34,6 +35,7 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 					if(to_render_from.current_piece.grid[y - to_render_from.piece_y][x - to_render_from.piece_x]) {
 						to_draw = color_Normal(255, 0, 0, 255, 255);
 						renderer_DrawQuad(render_with, x_start_pos, y_start_pos, block_size, block_size, to_draw);
+
 					}
 				}
 			}
@@ -44,7 +46,17 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 
 	renderer_DrawQuad(render_with, 0, 0, normal * render_with.ren_x, 20, color_Normal(1 - normal, 0, normal, 1, 1));
 
+	char levels_cleared_string[10];
+	sprintf(&levels_cleared_string, "%d", to_render_from.lines_cleared);
+	renderer_DrawText(render_with, 400, 400, 1.0, levels_cleared_string);
+
+	char current_speed[20];
+	sprintf(&current_speed, "SPEED %.2f", to_render_from.speed);
+	renderer_DrawText(render_with, 400, 448, 1.0, current_speed);
+
+
 	if(to_render_from.game_lost) {
 		renderer_DrawTexture(render_with, 0, 0, 800, 600, 1);
 	}
+
 }
