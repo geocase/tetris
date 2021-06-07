@@ -81,11 +81,13 @@ tetris_Init(float game_time) {
 	         color_Normal(255, 122, 33, 255, 255),
 	         color_Normal(0, 0, 255, 255, 255)},
 	    .update_acc    = 0,
-	    .speed         = .1f, // once per second to start
+	    .speed         = .75f, // once per second to start
 	    .piece_x       = 3,
 	    .piece_y       = 20,
 	    .current_piece = tetrimino_Init(rand() % BT_MAX),
-		.game_lost = false
+		.game_lost = false,
+		.lines_cleared = 0,
+		.level = 1
 	};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
@@ -127,6 +129,16 @@ tetris_StampPiece(struct Tetris* to_be_stamped_on) {
 		}
 	}
 	return true;
+}
+
+static void
+tetris_LevelUp(struct Tetris* to_level_up) {
+	to_level_up->level += 1;
+	to_level_up->speed -= (to_level_up->speed / 4.0f);
+
+	printf("LEVEL UP\n LEVEL %d\n", to_level_up->level);
+	printf("speed %f\n", to_level_up->speed);
+
 }
 
 void
@@ -215,8 +227,10 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		}
 	}
 
+	int rows_cleared = 0;
 	for(int i = 0; i < PLAYFIELD_Y_MIN; ++i) {
 		if(row_cleared[i]) {
+			++rows_cleared;
 			for(int x = 0; x < PLAYFIELD_X; ++x) {
 				to_update->playfield[i + PLAYFIELD_Y_MIN][x] = BLOCKCOLOR_EMPTY;
 			}
@@ -227,6 +241,32 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 				}
 			}
 		}
+	}
+	if(rows_cleared) {
+		printf("%d rows cleared\n", rows_cleared);
+	}
+	
+	int score_update = 0;
+	switch(rows_cleared) {
+		case 1:
+			 score_update = 1;
+			 break;
+		case 2:
+			score_update = 3;
+			break;
+		case 3:
+			score_update = 5;
+		case 4:
+			score_update = 8;
+		default:
+			score_update = 0;
+			break;
+	}
+	to_update->lines_cleared += score_update;
+	printf("LINES_CLEARED %d SCORE UPDATE %d\n", to_update->lines_cleared, score_update);
+
+	if(to_update->lines_cleared >= to_update->level * 5) {
+		tetris_LevelUp(to_update);
 	}
 }
 
@@ -274,5 +314,4 @@ tetrimino_Rotate(struct Tetrimino* to_rotate) {
 	}
 	to_rotate->rotation++;
 	to_rotate->rotation %= 4;
-	printf("ROTATION %d\n", to_rotate->rotation);
 }

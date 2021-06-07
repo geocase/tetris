@@ -30,8 +30,8 @@ struct Tetris {
 	Keypress_t hard_drop_key;
 	bool hard_dropped;
 	uint8_t playfield[PLAYFIELD_Y][PLAYFIELD_X];
-	uint32_t score;
-	uint32_t level;
+	int score;
+	int level;
 
 	Color_t color_defs[BLOCKCOLOR_MAX];
 
@@ -41,6 +41,8 @@ struct Tetris {
 	int piece_x, piece_y; // top left justified.
 	struct Tetrimino current_piece;
 	bool game_lost;
+
+	int lines_cleared;
 };
 
 struct Tetris tetris_Init(float game_time);
