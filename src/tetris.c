@@ -139,6 +139,16 @@ tetris_LevelUp(struct Tetris* to_level_up) {
 
 void
 tetris_Update(struct Tetris* to_update, float game_time) {
+	if(to_update->reset_key.just_pressed) {
+		if(!to_update->reset_key.is_pressed) {
+			*to_update = tetris_Init(0);
+			return;
+			to_update->reset_key.is_pressed = true;
+		}
+	} else {
+		to_update->reset_key.is_pressed = false;
+	}
+
 	if(to_update->game_lost) {
 		return;
 	}
@@ -189,16 +199,6 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		}
 	} else {
 		to_update->right_key.is_pressed = false;
-	}
-
-	if(to_update->reset_key.just_pressed) {
-		if(!to_update->reset_key.is_pressed) {
-			*to_update = tetris_Init(0);
-			return;
-			to_update->reset_key.is_pressed = true;
-		}
-	} else {
-		to_update->reset_key.is_pressed = false;
 	}
 
 	to_update->update_acc += game_time;
