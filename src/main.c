@@ -34,9 +34,10 @@ main() {
 #elif _WIN32
 int
 wmain() {
+	#ifdef NDEBUG
 	FreeConsole();
+	#endif
 #endif
-
 	srand((unsigned int)time(NULL));
 	game                = tetris_Init((float)glfwGetTime());
 	struct Window win   = window_Init(800, 600, "tetris");
