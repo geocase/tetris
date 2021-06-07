@@ -191,6 +191,16 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		to_update->right_key.is_pressed = false;
 	}
 
+	if(to_update->reset_key.just_pressed) {
+		if(!to_update->reset_key.is_pressed) {
+			*to_update = tetris_Init(0);
+			return;
+			to_update->reset_key.is_pressed = true;
+		}
+	} else {
+		to_update->reset_key.is_pressed = false;
+	}
+
 	to_update->update_acc += game_time;
 	if(to_update->update_acc >= to_update->speed || to_update->hard_dropped) {
 		to_update->update_acc = 0.0f;

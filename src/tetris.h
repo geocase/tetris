@@ -28,6 +28,7 @@ struct Tetris {
 	Keypress_t left_key;
 	Keypress_t right_key;
 	Keypress_t hard_drop_key;
+	Keypress_t reset_key;
 	bool hard_dropped;
 	uint8_t playfield[PLAYFIELD_Y][PLAYFIELD_X];
 	int score;
