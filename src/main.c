@@ -15,6 +15,8 @@
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
 
+#include <windows.h>
+
 struct Tetris game;
 
 void
@@ -25,8 +27,15 @@ key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
 	game.hard_drop_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_UP);
 }
 
+#ifdef __linux__
 int
 main() {
+#elif _WIN32
+int
+wmain() {
+	FreeConsole();
+#endif
+
 	srand((unsigned int)time(NULL));
 	game                = tetris_Init((float)glfwGetTime());
 	struct Window win   = window_Init(800, 600, "tetris");
