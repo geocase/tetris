@@ -29,6 +29,8 @@ struct Tetris {
 	Keypress_t right_key;
 	Keypress_t hard_drop_key;
 	Keypress_t reset_key;
+	Keypress_t pause_key;
+	Keypress_t fast_drop_key;
 	bool hard_dropped;
 	uint8_t playfield[PLAYFIELD_Y][PLAYFIELD_X];
 	int score;
@@ -42,6 +44,9 @@ struct Tetris {
 	int piece_x, piece_y; // top left justified.
 	struct Tetrimino current_piece;
 	bool game_lost;
+	bool paused;
+
+	bool fast_drop_on;
 
 	int lines_cleared;
 };

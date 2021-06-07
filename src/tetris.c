@@ -87,7 +87,9 @@ tetris_Init(float game_time) {
 	    .current_piece = tetrimino_Init(rand() % BT_MAX),
 		.game_lost = false,
 		.lines_cleared = 0,
-		.level = 1
+		.level = 1,
+		.paused = false,
+		.fast_drop_on = false
 	};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
@@ -149,7 +151,20 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		to_update->reset_key.is_pressed = false;
 	}
 
+	if(to_update->pause_key.just_pressed) {
+		if(!to_update->pause_key.is_pressed) {
+			to_update->paused = !to_update->paused;
+			to_update->pause_key.is_pressed = true;
+		}
+	} else {
+		to_update->pause_key.is_pressed = false;
+	}
+
 	if(to_update->game_lost) {
+		return;
+	}
+
+	if(to_update->paused) {
 		return;
 	}
 
@@ -201,8 +216,15 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		to_update->right_key.is_pressed = false;
 	}
 
+	to_update->fast_drop_on = to_update->fast_drop_key.is_pressed;
+
+
 	to_update->update_acc += game_time;
-	if(to_update->update_acc >= to_update->speed || to_update->hard_dropped) {
+	float adjusted_speed = to_update->speed;
+	if(to_update->fast_drop_on) {
+		adjusted_speed /= 10.0f;
+	}
+	if(to_update->update_acc >= adjusted_speed || to_update->hard_dropped) {
 		to_update->update_acc = 0.0f;
 		if(tetris_MoveOkay(to_update, 0, 1)) {
 			to_update->piece_y += 1;

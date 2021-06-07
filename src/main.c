@@ -26,6 +26,13 @@ key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
 	game.right_key.just_pressed     = (action == GLFW_PRESS && key == GLFW_KEY_RIGHT);
 	game.hard_drop_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_UP);
 	game.reset_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_R);
+	game.pause_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_P);
+	if(action == GLFW_PRESS && key == GLFW_KEY_DOWN) {
+		game.fast_drop_key.is_pressed = true;
+	}
+	if(action == GLFW_RELEASE && key == GLFW_KEY_DOWN) {
+		game.fast_drop_key.is_pressed = false;
+	}
 }
 
 #ifdef __linux__
