@@ -48,11 +48,11 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 
 	char levels_cleared_string[10];
 	sprintf(&levels_cleared_string, "%d", to_render_from.lines_cleared);
-	renderer_DrawText(render_with, 400, 400, 1.0, levels_cleared_string);
+	renderer_DrawText(render_with, 330, 400, 1.0, levels_cleared_string);
 
 	char current_speed[20];
 	sprintf(&current_speed, "SPEED %.2f", to_render_from.speed);
-	renderer_DrawText(render_with, 400, 448, 1.0, current_speed);
+	renderer_DrawText(render_with, 330, 448, 1.0, current_speed);
 
 
 	if(to_render_from.game_lost) {

@@ -75,11 +75,11 @@ renderer_GlyphInit(struct Renderer* to_init_to) {
 		exit(-1);
 	}
 	FT_Face face;
-	if(FT_New_Face(ft, "arial.ttf", 0, &face)) {
+	if(FT_New_Face(ft, "PressStart2P-Regular.ttf", 0, &face)) {
 		exit(-1);
 	}
 
-	FT_Set_Pixel_Sizes(face, 0, 48);
+	FT_Set_Pixel_Sizes(face, 0, 36);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);   
 
@@ -318,7 +318,6 @@ renderer_DrawText(struct Renderer to_render, float x, float y, float scale, cons
 	glBindVertexArray(to_render.glyph_vao);
 
 	for(int c = 0; c < strlen(text_to_draw); ++c) {
-		printf("%c\n", text_to_draw[c]);
  		CharacterGlyph_t ch = to_render.char_glyphs[text_to_draw[c]];
 
 		float xpos = x + ch.bearing_x * scale;
@@ -344,6 +343,4 @@ renderer_DrawText(struct Renderer to_render, float x, float y, float scale, cons
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		x += (ch.advance >> 6) * scale;
 	}
-	// glBindVertexArray(0);
-    // glBindTexture(GL_TEXTURE_2D, 0);
 }

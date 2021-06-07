@@ -8,10 +8,10 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 	{
 		.type = BT_I,
 		.grid = {
-			{0, 1, 0, 0},
-			{0, 1, 0, 0},
-			{0, 1, 0, 0},
-			{0, 1, 0, 0},
+			{0, 0, 0, 0},
+			{1, 1, 1, 1},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
 		},
 	},
 	{
@@ -53,18 +53,18 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 	{
 		.type = BT_J,
 		.grid = {
-			{0, 1, 0, 0},
-			{0, 1, 0, 0},
-			{1, 1, 0, 0},
+			{1, 0, 0, 0},
+			{1, 1, 1, 0},
+			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
 	},
 	{
 		.type = BT_L,
 		.grid = {
-			{0, 1, 0, 0},
-			{0, 1, 0, 0},
-			{0, 1, 1, 0},
+			{0, 0, 1, 0},
+			{1, 1, 1, 0},
+			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
 	},
@@ -135,10 +135,6 @@ static void
 tetris_LevelUp(struct Tetris* to_level_up) {
 	to_level_up->level += 1;
 	to_level_up->speed -= (to_level_up->speed / 4.0f);
-
-	printf("LEVEL UP\n LEVEL %d\n", to_level_up->level);
-	printf("speed %f\n", to_level_up->speed);
-
 }
 
 void
@@ -242,10 +238,7 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			}
 		}
 	}
-	if(rows_cleared) {
-		printf("%d rows cleared\n", rows_cleared);
-	}
-	
+
 	int score_update = 0;
 	switch(rows_cleared) {
 		case 1:
@@ -263,7 +256,6 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			break;
 	}
 	to_update->lines_cleared += score_update;
-	// printf("LINES_CLEARED %d SCORE UPDATE %d\n", to_update->lines_cleared, score_update);
 
 	if(to_update->lines_cleared >= to_update->level * 5) {
 		tetris_LevelUp(to_update);
