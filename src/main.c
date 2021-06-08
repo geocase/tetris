@@ -13,8 +13,8 @@
 #include <GLFW/glfw3.h>
 #include <AL/al.h>
 #include <AL/alc.h>
-
 #include <sndfile.h>
+#include "audio.h"
 
 #define FRAME_LIMITING 1
 #define FRAMERATE 144
@@ -64,7 +64,6 @@ wmain() {
 	FreeConsole();
 	#endif
 #endif
-	
 	list_audio_devices(alcGetString(NULL, ALC_DEVICE_SPECIFIER));
 
 	ALCdevice *device = alcOpenDevice(NULL);
@@ -98,29 +97,10 @@ wmain() {
 	alSource3f(source2, AL_VELOCITY, 0, 0, 0);
 	alSourcei(source2, AL_LOOPING, AL_TRUE);
 
-	ALuint buffer;
-	alGenBuffers(1, &buffer);
+	AudioSample_t air_raid = audiosample_LoadFile("air_raid.wav");
 
-	SF_INFO sfinfo;
-	SNDFILE* sndfile = sf_open("air_raid.wav", SFM_READ, &sfinfo);
-	ALenum format = AL_NONE;
-	if (sfinfo.channels == 1)
-		format = AL_FORMAT_MONO16;
-	else if (sfinfo.channels == 2)
-		format = AL_FORMAT_STEREO16;
-
-	short* membuf = malloc((sfinfo.frames * sfinfo.channels) * sizeof(short));
-
-	sf_count_t num_frames = sf_readf_short(sndfile, membuf, sfinfo.frames);
-	if(num_frames < 1) {
-		exit(-1);
-	}
-
-	ALsizei num_bytes = (ALsizei)(num_frames * sfinfo.channels) * (ALsizei)sizeof(short);
-	alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
-
-	alSourcei(source, AL_BUFFER, buffer);
-	alSourcei(source2, AL_BUFFER, buffer);
+	// alSourcei(source, AL_BUFFER, buffer);
+	alSourcei(source2, AL_BUFFER, air_raid.al_buffer);
 	// alSourcePlay(source);
 	// Sleep(1000);
 	alSourcePlay(source2);
@@ -138,7 +118,7 @@ wmain() {
 	glfwSetKeyCallback(win.window, key_callback);
 
 	while(window_Active(win)) {
-		alSource3f(source2, AL_POSITION, sinf(glfwGetTime()) * 20, 0, 0);
+		// alSource3f(source2, AL_POSITION, sinf(glfwGetTime()) * 20, 0, 0);
 
 		glfwPollEvents();
 		double game_update_acc_time = glfwGetTime() - game_start_time;

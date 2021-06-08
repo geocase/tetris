@@ -16,7 +16,7 @@ link_directories(vendor/openal-soft-1.21.1-bin/libs/Win64)
 include_directories(vendor/libsndfile/include)
 link_directories(vendor/libsndfile/lib)
 
-set(SOURCES src/main.c src/tetris.c src/shader.c src/renderer.c src/window.c src/painter.c)
+set(SOURCES src/main.c src/tetris.c src/shader.c src/renderer.c src/window.c src/painter.c src/audio.c)
 set(GLAD_SOURCES vendor/glad/src/glad.c)
 add_executable(tetris ${SOURCES} ${GLAD_SOURCES})
 set_property(TARGET tetris PROPERTY C_STANDARD 11)
