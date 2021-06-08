@@ -15,7 +15,6 @@
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
 
-#include <windows.h>
 
 struct Tetris game;
 
@@ -39,6 +38,7 @@ key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
 int
 main() {
 #elif _WIN32
+#include <windows.h>
 int
 wmain() {
 	#ifdef NDEBUG
