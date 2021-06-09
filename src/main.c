@@ -49,27 +49,26 @@ wmain() {
 #endif
 #endif
 
-	struct AudioPlayer ap = audioplayer_Init();
-	audioplayer_LoadSample(&ap, "air_raid.wav", 1);
-	audioplayer_PlaySound(ap, 0, false, true);
-	unsigned int bg = audioplayer_PlaySound(ap, 1, false, true);
-
-	Sleep(2000);
-	audioplayer_StopSound(ap, bg);
+	
 
 	srand((unsigned int)time(NULL));
 	game                = tetris_Init((float)glfwGetTime());
 	struct Window win   = window_Init(800, 600, "tetris");
 	struct Renderer ren = renderer_Init((float)win.win_x, (float)win.win_y);
 
+	struct AudioPlayer ap = audioplayer_Init();
+	audioplayer_LoadSample(&ap, "beep_1.wav", 0);
+	audioplayer_LoadSample(&ap, "music_0.wav", 1);
+
 	double start_time      = glfwGetTime();
 	double game_start_time = glfwGetTime();
 
 	glfwSetKeyCallback(win.window, key_callback);
 
-	while(window_Active(win)) {
-		// alSource3f(source2, AL_POSITION, sinf(glfwGetTime()) * 20, 0, 0);
+	audioplayer_PlaySound(ap, 1, false, true);
+	unsigned int bg = audioplayer_PlaySound(ap, 1, false, true);
 
+	while(window_Active(win)) {
 		glfwPollEvents();
 		double game_update_acc_time = glfwGetTime() - game_start_time;
 		if(game_update_acc_time > 1.0f / GAME_UPDATE_RATE) {

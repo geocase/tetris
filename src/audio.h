@@ -26,6 +26,6 @@ struct AudioPlayer {
 
 struct AudioPlayer audioplayer_Init();
 unsigned int audioplayer_PlaySound(struct AudioPlayer to_play_from, unsigned int sample, bool persistant, bool looping);
-
+void audioplayer_StopSound(struct AudioPlayer to_play_from, unsigned int channel);
 unsigned int audioplayer_LoadSample(struct AudioPlayer* to_load_to, const char* path, unsigned int slot);
 #endif

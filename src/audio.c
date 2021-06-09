@@ -65,7 +65,7 @@ audioplayer_Init() {
 		ap.channels[i].persistant = false;
 		alGenSources(1, &(ap.channels[i].al_source));
 		alSourcef(ap.channels[i].al_source, AL_PITCH, 1);
-		alSourcef(ap.channels[i].al_source, AL_GAIN, 1);
+		alSourcef(ap.channels[i].al_source, AL_GAIN, .001);
 		alSource3f(ap.channels[i].al_source, AL_POSITION, 0, 0, 0);
 		alSource3f(ap.channels[i].al_source, AL_VELOCITY, 0, 0, 0);
 		alSourcei(ap.channels[i].al_source, AL_LOOPING, AL_FALSE);
