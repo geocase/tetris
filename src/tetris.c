@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "audio.h"
 #include "tetris.h"
 
 // clang-format off
@@ -139,10 +139,13 @@ tetris_LevelUp(struct Tetris* to_level_up) {
 }
 
 void
-tetris_Update(struct Tetris* to_update, float game_time) {
+tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float game_time) {
+	float volume = .01f;
 	if(to_update->reset_key.just_pressed) {
 		if(!to_update->reset_key.is_pressed) {
 			*to_update = tetris_Init(0);
+			audioplayer_PlaySoundWithVolume(ap, 1, volume, false, false);
+
 			return;
 			to_update->reset_key.is_pressed = true;
 		}
@@ -171,6 +174,8 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		if(!to_update->rotate_key.is_pressed) {
 			tetrimino_Rotate(&(to_update->current_piece));
 			if(!tetris_MoveOkay(to_update, 0, 0)) {
+				audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
+
 				tetrimino_Rotate(&(to_update->current_piece));
 				tetrimino_Rotate(&(to_update->current_piece));
 				tetrimino_Rotate(&(to_update->current_piece));
@@ -188,6 +193,7 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 			}
 			to_update->hard_dropped             = true;
 			to_update->hard_drop_key.is_pressed = true;
+			audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
 		}
 	} else {
 		to_update->hard_drop_key.is_pressed = false;
@@ -197,6 +203,9 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		if(!to_update->left_key.is_pressed) {
 			if(tetris_MoveOkay(to_update, -1, 0)) {
 				to_update->piece_x -= 1;
+			} else {
+			audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
+
 			}
 			to_update->left_key.is_pressed = true;
 		}
@@ -208,6 +217,9 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		if(!to_update->right_key.is_pressed) {
 			if(tetris_MoveOkay(to_update, 1, 0)) {
 				to_update->piece_x += 1;
+			} else {
+			audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
+
 			}
 			to_update->right_key.is_pressed = true;
 		}
@@ -269,25 +281,33 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 		}
 	}
 
+	int lines_update = 0;
 	int score_update = 0;
 	switch(rows_cleared) {
 	case 1:
-		score_update = 1;
+		lines_update = 1;
+		score_update = 40 * (to_update->level + 1);
 		break;
 	case 2:
-		score_update = 3;
+		lines_update = 3;
+		score_update = 100 * (to_update->level + 1);
 		break;
 	case 3:
-		score_update = 5;
+		lines_update = 5;
+		score_update = 300 * (to_update->level + 1);
 		break;
 	case 4:
-		score_update = 8;
+		lines_update = 8;
+		score_update = 1200 * (to_update->level + 1);
 		break;
 	default:
+		lines_update = 0;
 		score_update = 0;
+
 		break;
 	}
-	to_update->lines_cleared += score_update;
+	to_update->lines_cleared += lines_update;
+	to_update->score += score_update;
 
 	if(to_update->lines_cleared >= to_update->level * 5) {
 		tetris_LevelUp(to_update);

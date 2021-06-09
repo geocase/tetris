@@ -59,23 +59,23 @@ wmain() {
 	struct Renderer ren = renderer_Init((float)win.win_x, (float)win.win_y);
 
 	struct AudioPlayer ap = audioplayer_Init();
-	audioplayer_LoadSample(&ap, ASSET_DIR "beep_1.wav", 0);
-	audioplayer_LoadSample(&ap, ASSET_DIR "music_0.wav", 1);
+	audioplayer_LoadSample(&ap, ASSET_DIR "beep_0.wav", 0);
+	audioplayer_LoadSample(&ap, ASSET_DIR "beep_1.wav", 1);
+	audioplayer_LoadSample(&ap, ASSET_DIR "music_0.wav", 2);
 
 	double start_time      = glfwGetTime();
 	double game_start_time = glfwGetTime();
 
 	glfwSetKeyCallback(win.window, key_callback);
 
-	audioplayer_PlaySound(ap, 1, false, true);
-	unsigned int bg = audioplayer_PlaySound(ap, 1, false, true);
+	unsigned int bg = audioplayer_PlaySoundWithVolume(ap, 2, .001f, false, true);
 
 	while(window_Active(win)) {
 		glfwPollEvents();
 		double game_update_acc_time = glfwGetTime() - game_start_time;
 		if(game_update_acc_time > 1.0f / GAME_UPDATE_RATE) {
 			game_start_time = glfwGetTime();
-			tetris_Update(&game, 1.0f / GAME_UPDATE_RATE);
+			tetris_Update(&game, ap, 1.0f / GAME_UPDATE_RATE);
 		}
 
 		double acc_time = glfwGetTime() - start_time;

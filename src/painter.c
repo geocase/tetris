@@ -44,13 +44,21 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 
 	renderer_DrawQuad(render_with, 0, 0, normal * render_with.ren_x, 20, color_Normal(1 - normal, 0, normal, 1, 1));
 
-	char levels_cleared_string[10];
-	sprintf(&levels_cleared_string, "%d", to_render_from.lines_cleared);
-	renderer_DrawText(render_with, 330, 400, 1.0, levels_cleared_string);
+	char levels_cleared_string[20];
+	sprintf(&levels_cleared_string, "Lines: %d", to_render_from.lines_cleared);
+	renderer_DrawText(render_with, 330, 400 - (48 * 2), 1.0, levels_cleared_string);
+
+	char levels_string[10];
+	sprintf(&levels_string, "Level: %d", to_render_from.level);
+	renderer_DrawText(render_with, 330, 400 - 48, 1.0, levels_string);
 
 	char current_speed[20];
-	sprintf(&current_speed, "SPEED %.2f", to_render_from.speed);
-	renderer_DrawText(render_with, 330, 448, 1.0, current_speed);
+	sprintf(&current_speed, "Speed: %.2f", to_render_from.speed);
+	renderer_DrawText(render_with, 330, 448 - 48, 1.0, current_speed);
+
+	char current_score[20];
+	sprintf(&current_score, "Score: %d", to_render_from.score);
+	renderer_DrawText(render_with, 330, 448, 1.0, current_score);
 
 	if(to_render_from.game_lost) {
 		renderer_DrawTexture(render_with, 0, 0, 800, 600, 1);

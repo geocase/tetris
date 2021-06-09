@@ -65,7 +65,7 @@ audioplayer_Init() {
 		ap.channels[i].persistant = false;
 		alGenSources(1, &(ap.channels[i].al_source));
 		alSourcef(ap.channels[i].al_source, AL_PITCH, 1);
-		alSourcef(ap.channels[i].al_source, AL_GAIN, .001);
+		alSourcef(ap.channels[i].al_source, AL_GAIN, 1);
 		alSource3f(ap.channels[i].al_source, AL_POSITION, 0, 0, 0);
 		alSource3f(ap.channels[i].al_source, AL_VELOCITY, 0, 0, 0);
 		alSourcei(ap.channels[i].al_source, AL_LOOPING, AL_FALSE);
@@ -75,12 +75,19 @@ audioplayer_Init() {
 
 unsigned int
 audioplayer_PlaySound(struct AudioPlayer to_play_from, unsigned int sample, bool persistant, bool looping) {
+	return audioplayer_PlaySoundWithVolume(to_play_from, sample, 1.0, persistant, looping);
+}
+
+unsigned int
+audioplayer_PlaySoundWithVolume(struct AudioPlayer to_play_from, unsigned int sample, float volume, bool persistant, bool looping) {
 	ALint source_state;
 	int i = 0;
 	for(; i < MAX_CHANNELS; ++i) {
-		to_play_from.channels[i].persistant = persistant;
+		
 		alGetSourcei(to_play_from.channels[i].al_source, AL_SOURCE_STATE, &source_state);
 		if(!(to_play_from.channels[i].persistant) && (source_state != AL_PLAYING)) {
+			to_play_from.channels[i].persistant = persistant;
+			alSourcef(to_play_from.channels[i].al_source, AL_GAIN, volume);
 			alSourcei(to_play_from.channels[i].al_source, AL_BUFFER, to_play_from.samples[sample].al_buffer);
 			if(looping) {
 				alSourcei(to_play_from.channels[i].al_source, AL_LOOPING, AL_TRUE);
@@ -94,6 +101,7 @@ audioplayer_PlaySound(struct AudioPlayer to_play_from, unsigned int sample, bool
 	}
 	return i;
 }
+
 
 void
 audioplayer_StopSound(struct AudioPlayer to_play_from, unsigned int channel) {

@@ -52,7 +52,7 @@ struct Tetris {
 };
 
 struct Tetris tetris_Init(float game_time);
-void tetris_Update(struct Tetris* to_update, float game_time);
+void tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float game_time);
 
 struct Tetrimino tetrimino_Init();
 void tetrimino_Rotate(struct Tetrimino* to_rotate);
