@@ -4,7 +4,6 @@
 #define MAX_CHANNELS 10
 #include <AL/al.h>
 #include <AL/alc.h>
-
 #include <stdbool.h>
 
 typedef struct {
@@ -19,6 +18,8 @@ typedef struct {
 } AudioChannel_t;
 
 struct AudioPlayer {
+	ALCdevice* device;
+	ALCcontext* context;
 	AudioSample_t samples[MAX_SAMPLES];
 	AudioChannel_t channels[MAX_CHANNELS];
 };

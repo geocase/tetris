@@ -2,12 +2,25 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "audio.h"
 
+static void
+list_audio_devices(const ALCchar* devices) {
+	const ALCchar *device = devices, *next = devices + 1;
+	size_t len = 0;
+	printf("devices:\n");
+	while(device && *device != '\0' && next && *next != '\0') {
+		printf("%s\n", devices);
+		len = strlen(device);
+		device += (len + 1);
+		next += (len + 2);
+	}
+}
+
 AudioSample_t
 audiosample_LoadFile(const char* path) {
-	ALCenum error;
 	ALuint buffer;
 	alGenBuffers(1, &buffer);
 
@@ -36,7 +49,18 @@ audiosample_LoadFile(const char* path) {
 
 struct AudioPlayer
 audioplayer_Init() {
+	list_audio_devices(alcGetString(NULL, ALC_DEVICE_SPECIFIER));
+
 	struct AudioPlayer ap;
+	ap.device = alcOpenDevice(NULL);
+	if(!ap.device) {
+		exit(-1);
+	}
+	ap.context = alcCreateContext(ap.device, NULL);
+	if(!alcMakeContextCurrent(ap.context)) {
+		exit(-1);
+	}
+
 	for(int i = 0; i < MAX_CHANNELS; ++i) {
 		ap.channels[i].persistant = false;
 		alGenSources(1, &(ap.channels[i].al_source));

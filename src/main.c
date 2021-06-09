@@ -19,20 +19,6 @@
 #define FRAME_LIMITING 1
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
-
-static void
-list_audio_devices(const ALCchar* devices) {
-	const ALCchar *device = devices, *next = devices + 1;
-	size_t len = 0;
-	printf("devices:\n");
-	while(device && *device != '\0' && next && *next != '\0') {
-		printf("%s\n", devices);
-		len = strlen(device);
-		device += (len + 1);
-		next += (len + 2);
-	}
-}
-
 struct Tetris game;
 
 void
@@ -62,22 +48,6 @@ wmain() {
 	FreeConsole();
 #endif
 #endif
-	list_audio_devices(alcGetString(NULL, ALC_DEVICE_SPECIFIER));
-
-	ALCdevice* device = alcOpenDevice(NULL);
-	if(!device) {
-		exit(-1);
-	}
-	ALCcontext* context = alcCreateContext(device, NULL);
-	if(!alcMakeContextCurrent(context)) {
-		exit(-1);
-	}
-
-	ALfloat listenerOri[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f};
-
-	alListener3f(AL_POSITION, 0, 0, 1.0f);
-	alListener3f(AL_VELOCITY, 0, 0, 0);
-	alListenerfv(AL_ORIENTATION, listenerOri);
 
 	struct AudioPlayer ap = audioplayer_Init();
 	audioplayer_LoadSample(&ap, "air_raid.wav", 1);
