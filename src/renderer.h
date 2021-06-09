@@ -50,6 +50,7 @@ Texture_t renderer_LoadTexture(struct Renderer* to_load_to, const char* path);
 
 void renderer_DrawQuadBoundaries(struct Renderer to_render, float x0, float y0, float x1, float y1, Color_t color);
 void renderer_DrawQuad(struct Renderer to_render, float x, float y, float sx, float sy, Color_t color);
+
 void renderer_DrawTextureBoundariesWithRepeat(
     struct Renderer to_render,
     float x0,
@@ -60,7 +61,9 @@ void renderer_DrawTextureBoundariesWithRepeat(
     float repeat_y,
     unsigned int texture);
 
+void renderer_DrawTextureWithRepeat(struct Renderer to_render, float x, float y, float sx, float sy, float repeat_x, float repeat_y, unsigned int texture);
 void renderer_DrawTexture(struct Renderer to_render, float x, float y, float sx, float sy, unsigned int texture);
+
 void
 renderer_DrawLine(struct Renderer to_render, float line_width, float x0, float y0, float x1, float y1, Color_t color);
 
