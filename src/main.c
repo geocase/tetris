@@ -1,8 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 
 #include "painter.h"
 #include "renderer.h"
@@ -10,30 +10,28 @@
 #include "tetris.h"
 #include "window.h"
 
-#include <GLFW/glfw3.h>
+#include "audio.h"
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <GLFW/glfw3.h>
 #include <sndfile.h>
-#include "audio.h"
 
 #define FRAME_LIMITING 1
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
 
-static void list_audio_devices(const ALCchar* devices) {
-	const ALCchar *device = devices, * next = devices + 1;
+static void
+list_audio_devices(const ALCchar* devices) {
+	const ALCchar *device = devices, *next = devices + 1;
 	size_t len = 0;
 	printf("devices:\n");
 	while(device && *device != '\0' && next && *next != '\0') {
 		printf("%s\n", devices);
 		len = strlen(device);
 		device += (len + 1);
-		next+= (len + 2);
+		next += (len + 2);
 	}
 }
-
-
-
 
 struct Tetris game;
 
@@ -43,8 +41,8 @@ key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
 	game.left_key.just_pressed      = (action == GLFW_PRESS && key == GLFW_KEY_LEFT);
 	game.right_key.just_pressed     = (action == GLFW_PRESS && key == GLFW_KEY_RIGHT);
 	game.hard_drop_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_UP);
-	game.reset_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_R);
-	game.pause_key.just_pressed = (action == GLFW_PRESS && key == GLFW_KEY_P);
+	game.reset_key.just_pressed     = (action == GLFW_PRESS && key == GLFW_KEY_R);
+	game.pause_key.just_pressed     = (action == GLFW_PRESS && key == GLFW_KEY_P);
 	if(action == GLFW_PRESS && key == GLFW_KEY_DOWN) {
 		game.fast_drop_key.is_pressed = true;
 	}
@@ -60,78 +58,34 @@ main() {
 #include <windows.h>
 int
 wmain() {
-	#ifdef NDEBUG
+#ifdef NDEBUG
 	FreeConsole();
-	#endif
+#endif
 #endif
 	list_audio_devices(alcGetString(NULL, ALC_DEVICE_SPECIFIER));
 
-	ALCdevice *device = alcOpenDevice(NULL);
+	ALCdevice* device = alcOpenDevice(NULL);
 	if(!device) {
 		exit(-1);
 	}
-	ALCcontext *context = alcCreateContext(device, NULL);
+	ALCcontext* context = alcCreateContext(device, NULL);
 	if(!alcMakeContextCurrent(context)) {
 		exit(-1);
 	}
 
-	ALfloat listenerOri[] = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
+	ALfloat listenerOri[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f};
 
 	alListener3f(AL_POSITION, 0, 0, 1.0f);
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 	alListenerfv(AL_ORIENTATION, listenerOri);
-
-	ALuint source;
-	alGenSources(1, &source);
-	alSourcef(source, AL_PITCH, 1);
-	alSourcef(source, AL_GAIN, 1);
-	alSource3f(source, AL_POSITION, 0, 0, 0);
-	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	alSourcei(source, AL_LOOPING, AL_TRUE);
-
-	ALuint source2;
-	alGenSources(1, &source2);
-	alSourcef(source2, AL_PITCH, 1);
-	alSourcef(source2, AL_GAIN, 1);
-	alSource3f(source2, AL_POSITION, 0, 0, 0);
-	alSource3f(source2, AL_VELOCITY, 0, 0, 0);
-	alSourcei(source2, AL_LOOPING, AL_TRUE);
-
-	// ALuint buffer;
-	// alGenBuffers(1, &buffer);
-
-	// SF_INFO sfinfo;
-	// SNDFILE* sndfile = sf_open("air_raid.wav", SFM_READ, &sfinfo);
-	// ALenum format = AL_NONE;
-	// if (sfinfo.channels == 1)
-	// 	format = AL_FORMAT_MONO16;
-	// else if (sfinfo.channels == 2)
-	// 	format = AL_FORMAT_STEREO16;
-
-	// short* membuf = malloc((sfinfo.frames * sfinfo.channels) * sizeof(short));
-
-	// sf_count_t num_frames = sf_readf_short(sndfile, membuf, sfinfo.frames);
-	// if(num_frames < 1) {
-	// 	exit(-1);
-	// }
-    // ALsizei num_bytes = (ALsizei)(num_frames * sfinfo.channels) * (ALsizei)sizeof(short);
-	// alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
-
-	// AudioSample_t air_raid = audiosample_LoadFile("air_raid.wav");
 
 	struct AudioPlayer ap = audioplayer_Init();
 	audioplayer_LoadSample(&ap, "air_raid.wav", 1);
 	audioplayer_PlaySound(ap, 0, false, true);
 	unsigned int bg = audioplayer_PlaySound(ap, 1, false, true);
 
-	// alSourcei(source, AL_BUFFER, buffer);
-	// alSourcei(source2, AL_BUFFER, air_raid.al_buffer);
-	// alSourcePlay(source);
-	// Sleep(1000);
-	// alSourcePlay(source2);
 	Sleep(2000);
 	audioplayer_StopSound(ap, bg);
-
 
 	srand((unsigned int)time(NULL));
 	game                = tetris_Init((float)glfwGetTime());

@@ -5,7 +5,6 @@ void
 paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from) {
 	// remove later! testing only!
 	renderer_DrawTexture(render_with, 0, 0, 800, 600, 0);
-	
 
 	float x_padding      = 100;
 	float x_offset       = 2;
@@ -35,7 +34,6 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 					if(to_render_from.current_piece.grid[y - to_render_from.piece_y][x - to_render_from.piece_x]) {
 						to_draw = color_Normal(255, 0, 0, 255, 255);
 						renderer_DrawQuad(render_with, x_start_pos, y_start_pos, block_size, block_size, to_draw);
-
 					}
 				}
 			}
@@ -54,9 +52,7 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 	sprintf(&current_speed, "SPEED %.2f", to_render_from.speed);
 	renderer_DrawText(render_with, 330, 448, 1.0, current_speed);
 
-
 	if(to_render_from.game_lost) {
 		renderer_DrawTexture(render_with, 0, 0, 800, 600, 1);
 	}
-
 }

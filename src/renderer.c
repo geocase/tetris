@@ -46,7 +46,7 @@ const char* tex_fs = "#version 330 core\n"
 
 const char* char_vs = "#version 330 core\n"
                       "layout (location = 0) in vec4 vertex;\n"
-					  "out vec2 tex_coords;\n"
+                      "out vec2 tex_coords;\n"
                       "uniform mat4 perspective;\n"
                       "void main() {\n"
                       "    gl_Position = vec4(vertex.xy, 0.0, 1.0) * perspective;\n"
@@ -55,13 +55,13 @@ const char* char_vs = "#version 330 core\n"
 
 const char* char_fs = "#version 330 core\n"
                       "in vec2 tex_coords;\n"
-					  "out vec4 color;\n"
-					  "uniform sampler2D text;\n"
-					  "uniform vec3 text_color;\n"
-					  "void main() {\n"
-					  "	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, tex_coords).r);\n"
-					  "	color = vec4(text_color, 1.0) * sampled;\n"
-					  "}";
+                      "out vec4 color;\n"
+                      "uniform sampler2D text;\n"
+                      "uniform vec3 text_color;\n"
+                      "void main() {\n"
+                      "	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, tex_coords).r);\n"
+                      "	color = vec4(text_color, 1.0) * sampled;\n"
+                      "}";
 
 Color_t
 color_Normal(float r, float b, float g, float a, float divisor) {
@@ -81,23 +81,32 @@ renderer_GlyphInit(struct Renderer* to_init_to) {
 
 	FT_Set_Pixel_Sizes(face, 0, 36);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);   
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	for(unsigned int c = 0; c < 128; c++) {
 		FT_Load_Char(face, c, FT_LOAD_RENDER);
 		glGenTextures(1, &(to_init_to->char_glyphs[c].texture_index));
 		glBindTexture(GL_TEXTURE_2D, to_init_to->char_glyphs[c].texture_index);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+		glTexImage2D(
+		    GL_TEXTURE_2D,
+		    0,
+		    GL_RED,
+		    face->glyph->bitmap.width,
+		    face->glyph->bitmap.rows,
+		    0,
+		    GL_RED,
+		    GL_UNSIGNED_BYTE,
+		    face->glyph->bitmap.buffer);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		to_init_to->char_glyphs[c].size_x = face->glyph->bitmap.width;
-		to_init_to->char_glyphs[c].size_y = face->glyph->bitmap.rows;
+		to_init_to->char_glyphs[c].size_x    = face->glyph->bitmap.width;
+		to_init_to->char_glyphs[c].size_y    = face->glyph->bitmap.rows;
 		to_init_to->char_glyphs[c].bearing_x = face->glyph->bitmap_left;
 		to_init_to->char_glyphs[c].bearing_y = face->glyph->bitmap_top;
-		to_init_to->char_glyphs[c].advance = face->glyph->advance.x;
+		to_init_to->char_glyphs[c].advance   = face->glyph->advance.x;
 	}
 
 	glGenVertexArrays(1, &(to_init_to->glyph_vao));
@@ -143,13 +152,12 @@ renderer_Init(float win_x, float win_y) {
 	         {0.0f, 2.0f / (top - bottom), 0.0f, -(top + bottom) / (top - bottom)},
 	         {0.0f, 0.0f, -2 / (far - near), -(far + near) / (far - near)},
 	         {0.0f, 0.0f, 0.0f, 1.0f}},
-	    .flat_color    = flat,
-	    .line_color    = flat,
-	    .texture_color = texture,
-		.character_color = text,
-	    .ren_x         = win_x,
-	    .ren_y         = win_y};
-
+	    .flat_color      = flat,
+	    .line_color      = flat,
+	    .texture_color   = texture,
+	    .character_color = text,
+	    .ren_x           = win_x,
+	    .ren_y           = win_y};
 
 	renderer_GlyphInit(&r);
 
@@ -228,7 +236,6 @@ renderer_LoadTexture(struct Renderer* to_load_to, const char* path) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex.size_x, tex.size_y, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	} else {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.size_x, tex.size_y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-
 	}
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(image);
@@ -311,14 +318,17 @@ void
 renderer_DrawText(struct Renderer to_render, float x, float y, float scale, const char* text_to_draw) {
 	shader_Use(to_render.character_color);
 	glUniform3f(glGetUniformLocation(to_render.character_color.program, "text_color"), 0.0f, 0.0f, 0.0f);
-	glUniformMatrix4fv(glGetUniformLocation(to_render.character_color.program, "perspective"), 1, GL_FALSE, (float*)to_render.view_matrix);
+	glUniformMatrix4fv(
+	    glGetUniformLocation(to_render.character_color.program, "perspective"),
+	    1,
+	    GL_FALSE,
+	    (float*)to_render.view_matrix);
 
-	
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(to_render.glyph_vao);
 
 	for(int c = 0; c < strlen(text_to_draw); ++c) {
- 		CharacterGlyph_t ch = to_render.char_glyphs[text_to_draw[c]];
+		CharacterGlyph_t ch = to_render.char_glyphs[text_to_draw[c]];
 
 		float xpos = x + ch.bearing_x * scale;
 		float ypos = y - ch.bearing_y * scale;
@@ -327,15 +337,14 @@ renderer_DrawText(struct Renderer to_render, float x, float y, float scale, cons
 		float h = ch.size_y * scale;
 
 		float vertices[6][4] = {
-			{xpos, ypos + h, 0.0f, 1.0f},
-			{xpos, ypos, 0.0f, 0.0f},
-			{xpos + w, ypos, 1.0f, 0.0f},
+		    {xpos, ypos + h, 0.0f, 1.0f},
+		    {xpos, ypos, 0.0f, 0.0f},
+		    {xpos + w, ypos, 1.0f, 0.0f},
 
-			{xpos, ypos + h, 0.0f, 1.0f},
-			{xpos + w, ypos, 1.0f, 0.0f},
-			{xpos + w, ypos + h, 1.0f, 1.0f}
-		};
-		
+		    {xpos, ypos + h, 0.0f, 1.0f},
+		    {xpos + w, ypos, 1.0f, 0.0f},
+		    {xpos + w, ypos + h, 1.0f, 1.0f}};
+
 		glBindTexture(GL_TEXTURE_2D, ch.texture_index);
 		glBindBuffer(GL_ARRAY_BUFFER, to_render.glyph_vbo);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);

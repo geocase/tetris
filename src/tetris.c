@@ -85,12 +85,11 @@ tetris_Init(float game_time) {
 	    .piece_x       = 3,
 	    .piece_y       = 20,
 	    .current_piece = tetrimino_Init(rand() % BT_MAX),
-		.game_lost = false,
-		.lines_cleared = 0,
-		.level = 1,
-		.paused = false,
-		.fast_drop_on = false
-	};
+	    .game_lost     = false,
+	    .lines_cleared = 0,
+	    .level         = 1,
+	    .paused        = false,
+	    .fast_drop_on  = false};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
 			t.playfield[y][x] = BLOCKCOLOR_EMPTY;
@@ -153,7 +152,7 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 
 	if(to_update->pause_key.just_pressed) {
 		if(!to_update->pause_key.is_pressed) {
-			to_update->paused = !to_update->paused;
+			to_update->paused               = !to_update->paused;
 			to_update->pause_key.is_pressed = true;
 		}
 	} else {
@@ -218,7 +217,6 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 
 	to_update->fast_drop_on = to_update->fast_drop_key.is_pressed;
 
-
 	to_update->update_acc += game_time;
 	float adjusted_speed = to_update->speed;
 	if(to_update->fast_drop_on) {
@@ -273,21 +271,21 @@ tetris_Update(struct Tetris* to_update, float game_time) {
 
 	int score_update = 0;
 	switch(rows_cleared) {
-		case 1:
-			 score_update = 1;
-			 break;
-		case 2:
-			score_update = 3;
-			break;
-		case 3:
-			score_update = 5;
-			break;
-		case 4:
-			score_update = 8;
-			break;
-		default:
-			score_update = 0;
-			break;
+	case 1:
+		score_update = 1;
+		break;
+	case 2:
+		score_update = 3;
+		break;
+	case 3:
+		score_update = 5;
+		break;
+	case 4:
+		score_update = 8;
+		break;
+	default:
+		score_update = 0;
+		break;
 	}
 	to_update->lines_cleared += score_update;
 
