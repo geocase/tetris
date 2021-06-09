@@ -1,11 +1,11 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 #define MAX_SAMPLES 8
-#define MAX_CHANNELS 32
+#define MAX_CHANNELS 10
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include <sndfile.h>
+#include <stdbool.h>
 
 typedef struct {
     ALuint al_buffer;
@@ -13,8 +13,19 @@ typedef struct {
 
 AudioSample_t audiosample_LoadFile(const char* path);
 
+typedef struct {
+    unsigned int al_source;
+    bool persistant;
+} AudioChannel_t;
+
 struct AudioPlayer {
     AudioSample_t samples[MAX_SAMPLES];
-    unsigned int channels[MAX_CHANNELS];
+    AudioChannel_t channels[MAX_CHANNELS];
 };
+
+struct AudioPlayer audioplayer_Init();
+unsigned int audioplayer_PlaySound(struct AudioPlayer to_play_from, unsigned int sample, bool persistant, bool looping);
+
+
+unsigned int audioplayer_LoadSample(struct AudioPlayer* to_load_to, const char* path, unsigned int slot);
 #endif
