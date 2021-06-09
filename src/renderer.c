@@ -63,6 +63,8 @@ const char* char_fs = "#version 330 core\n"
                       "	color = vec4(text_color, 1.0) * sampled;\n"
                       "}";
 
+#define ASSET_DIR "assets/"
+
 Color_t
 color_Normal(float r, float b, float g, float a, float divisor) {
 	return (Color_t){r / divisor, b / divisor, g / divisor, a / divisor};
@@ -75,7 +77,7 @@ renderer_GlyphInit(struct Renderer* to_init_to) {
 		exit(-1);
 	}
 	FT_Face face;
-	if(FT_New_Face(ft, "PressStart2P-Regular.ttf", 0, &face)) {
+	if(FT_New_Face(ft, ASSET_DIR "PressStart2P-Regular.ttf", 0, &face)) {
 		exit(-1);
 	}
 
@@ -214,8 +216,8 @@ renderer_Init(float win_x, float win_y) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	r.textures[0] = renderer_LoadTexture(&r, "64x64.png");
-	r.textures[1] = renderer_LoadTexture(&r, "game_over.png");
+	r.textures[0] = renderer_LoadTexture(&r, ASSET_DIR "64x64.png");
+	r.textures[1] = renderer_LoadTexture(&r, ASSET_DIR "game_over.png");
 
 	return r;
 }

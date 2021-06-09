@@ -16,6 +16,8 @@
 #include <GLFW/glfw3.h>
 #include <sndfile.h>
 
+#define ASSET_DIR "assets/"
+
 #define FRAME_LIMITING 1
 #define FRAMERATE 144
 #define GAME_UPDATE_RATE 60
@@ -57,8 +59,8 @@ wmain() {
 	struct Renderer ren = renderer_Init((float)win.win_x, (float)win.win_y);
 
 	struct AudioPlayer ap = audioplayer_Init();
-	audioplayer_LoadSample(&ap, "beep_1.wav", 0);
-	audioplayer_LoadSample(&ap, "music_0.wav", 1);
+	audioplayer_LoadSample(&ap, ASSET_DIR "beep_1.wav", 0);
+	audioplayer_LoadSample(&ap, ASSET_DIR "music_0.wav", 1);
 
 	double start_time      = glfwGetTime();
 	double game_start_time = glfwGetTime();
