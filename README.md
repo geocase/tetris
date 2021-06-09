@@ -1,4 +1,7 @@
 # Tetris
+![alt text](screenshot_0.png "screenshot")
+
+
 ## Building
 _Only tested on Windows, though should work fine on Linux given enough tweaking._
 
@@ -8,7 +11,7 @@ All libraries are expected to be in a directory entitled "vendor" in the root of
 this directory in order to generate the build files.
 
 ## File Heirachy
-![alt text](vendor_tree.png "glad")
+![alt text](vendor_tree.png "vendor tree")
 
 All source files should be placed in accordance to this file hierarchy
 
