@@ -13,6 +13,7 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
+		.block_color = BLOCKCOLOR_CYAN,
 	},
 	{
 		.type = BT_O,
@@ -22,6 +23,7 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
+		.block_color = BLOCKCOLOR_YELLOW,
 	},
 	{
 		.type = BT_T,
@@ -31,6 +33,7 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
+		.block_color = BLOCKCOLOR_PURPLE,
 	},
 	{
 		.type = BT_S,
@@ -40,6 +43,7 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
+		.block_color = BLOCKCOLOR_GREEN,
 	},
 	{
 		.type = BT_Z,
@@ -49,6 +53,7 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
+		.block_color = BLOCKCOLOR_RED,
 	},
 	{
 		.type = BT_J,
@@ -58,6 +63,7 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
+		.block_color = BLOCKCOLOR_BLUE,
 	},
 	{
 		.type = BT_L,
@@ -67,6 +73,7 @@ struct Tetrimino tetrimino_defs[BT_MAX] = {
 			{0, 0, 0, 0},
 			{0, 0, 0, 0},
 		},
+		.block_color = BLOCKCOLOR_ORANGE,
 	},
 };
 // clang-format on
@@ -79,7 +86,12 @@ tetris_Init(float game_time) {
 	    .color_defs =
 	        {color_Normal(82, 82, 82, 255, 255),
 	         color_Normal(255, 122, 33, 255, 255),
-	         color_Normal(0, 0, 255, 255, 255)},
+	         color_Normal(0, 0, 255, 255, 255),
+	         color_Normal(66, 233, 245, 255, 255),
+			 color_Normal(245, 239, 66, 255, 255),
+			 color_Normal(227, 66, 245, 255, 255),
+			 color_Normal(66, 245, 96, 255, 255),
+			 color_Normal(255, 0, 0, 255, 255)},
 	    .update_acc    = 0,
 	    .speed         = .75f, // once per second to start
 	    .piece_x       = 3,
@@ -125,7 +137,7 @@ tetris_StampPiece(struct Tetris* to_be_stamped_on) {
 		for(int x = 0; x < 4; ++x) {
 			if(to_be_stamped_on->current_piece.grid[y][x]) {
 				to_be_stamped_on->playfield[y + to_be_stamped_on->piece_y][x + to_be_stamped_on->piece_x] =
-				    BLOCKCOLOR_BLUE;
+				    to_be_stamped_on->current_piece.block_color;
 			}
 		}
 	}

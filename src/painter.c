@@ -32,7 +32,7 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 			if(to_render_from.piece_x <= x && to_render_from.piece_x + 3 >= x) {
 				if(to_render_from.piece_y <= y && to_render_from.piece_y + 3 >= y) {
 					if(to_render_from.current_piece.grid[y - to_render_from.piece_y][x - to_render_from.piece_x]) {
-						to_draw = color_Normal(255, 0, 0, 255, 255);
+						to_draw = to_render_from.color_defs[to_render_from.current_piece.block_color];
 						renderer_DrawQuad(render_with, x_start_pos, y_start_pos, block_size, block_size, to_draw);
 					}
 				}

@@ -7,7 +7,7 @@
 #define PLAYFIELD_Y 40 // anything above line 20 is hidden
 #define PLAYFIELD_Y_MIN 20
 
-enum BlockColor { BLOCKCOLOR_EMPTY, BLOCKCOLOR_ORANGE, BLOCKCOLOR_BLUE, BLOCKCOLOR_MAX };
+enum BlockColor { BLOCKCOLOR_EMPTY, BLOCKCOLOR_ORANGE, BLOCKCOLOR_BLUE, BLOCKCOLOR_CYAN, BLOCKCOLOR_YELLOW, BLOCKCOLOR_PURPLE, BLOCKCOLOR_GREEN, BLOCKCOLOR_RED, BLOCKCOLOR_MAX };
 enum BlockType { BT_I, BT_O, BT_T, BT_S, BT_Z, BT_J, BT_L, BT_MAX, BT_EMPTY };
 
 extern struct Tetrimino tetrimino_defs[BT_MAX];
@@ -16,6 +16,7 @@ struct Tetrimino {
 	unsigned int type;
 	bool grid[4][4];
 	int rotation;
+	unsigned int block_color;
 };
 
 typedef struct {
