@@ -293,7 +293,15 @@ renderer_DrawTextureBoundariesWithRepeat(
 }
 
 void
-renderer_DrawTextureWithRepeat(struct Renderer to_render, float x, float y, float sx, float sy, float repeat_x, float repeat_y, unsigned int texture) {
+renderer_DrawTextureWithRepeat(
+    struct Renderer to_render,
+    float x,
+    float y,
+    float sx,
+    float sy,
+    float repeat_x,
+    float repeat_y,
+    unsigned int texture) {
 	renderer_DrawTextureBoundariesWithRepeat(to_render, x, y, sx + x, sy + y, repeat_x, repeat_y, texture);
 }
 

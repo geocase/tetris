@@ -61,7 +61,15 @@ void renderer_DrawTextureBoundariesWithRepeat(
     float repeat_y,
     unsigned int texture);
 
-void renderer_DrawTextureWithRepeat(struct Renderer to_render, float x, float y, float sx, float sy, float repeat_x, float repeat_y, unsigned int texture);
+void renderer_DrawTextureWithRepeat(
+    struct Renderer to_render,
+    float x,
+    float y,
+    float sx,
+    float sy,
+    float repeat_x,
+    float repeat_y,
+    unsigned int texture);
 void renderer_DrawTexture(struct Renderer to_render, float x, float y, float sx, float sy, unsigned int texture);
 
 void

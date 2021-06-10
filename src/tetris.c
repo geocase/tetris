@@ -1,7 +1,7 @@
+#include "tetris.h"
+#include "audio.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "audio.h"
-#include "tetris.h"
 
 // clang-format off
 struct Tetrimino tetrimino_defs[BT_MAX] = {
@@ -88,10 +88,10 @@ tetris_Init(float game_time) {
 	         color_Normal(255, 122, 33, 255, 255),
 	         color_Normal(0, 0, 255, 255, 255),
 	         color_Normal(66, 233, 245, 255, 255),
-			 color_Normal(245, 239, 66, 255, 255),
-			 color_Normal(227, 66, 245, 255, 255),
-			 color_Normal(66, 245, 96, 255, 255),
-			 color_Normal(255, 0, 0, 255, 255)},
+	         color_Normal(245, 239, 66, 255, 255),
+	         color_Normal(227, 66, 245, 255, 255),
+	         color_Normal(66, 245, 96, 255, 255),
+	         color_Normal(255, 0, 0, 255, 255)},
 	    .update_acc    = 0,
 	    .speed         = .75f, // once per second to start
 	    .piece_x       = 3,
@@ -216,8 +216,7 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 			if(tetris_MoveOkay(to_update, -1, 0)) {
 				to_update->piece_x -= 1;
 			} else {
-			audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
-
+				audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
 			}
 			to_update->left_key.is_pressed = true;
 		}
@@ -230,8 +229,7 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 			if(tetris_MoveOkay(to_update, 1, 0)) {
 				to_update->piece_x += 1;
 			} else {
-			audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
-
+				audioplayer_PlaySoundWithVolume(ap, 0, volume, false, false);
 			}
 			to_update->right_key.is_pressed = true;
 		}

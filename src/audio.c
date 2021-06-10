@@ -79,11 +79,12 @@ audioplayer_PlaySound(struct AudioPlayer to_play_from, unsigned int sample, bool
 }
 
 unsigned int
-audioplayer_PlaySoundWithVolume(struct AudioPlayer to_play_from, unsigned int sample, float volume, bool persistant, bool looping) {
+audioplayer_PlaySoundWithVolume(
+    struct AudioPlayer to_play_from, unsigned int sample, float volume, bool persistant, bool looping) {
 	ALint source_state;
 	int i = 0;
 	for(; i < MAX_CHANNELS; ++i) {
-		
+
 		alGetSourcei(to_play_from.channels[i].al_source, AL_SOURCE_STATE, &source_state);
 		if(!(to_play_from.channels[i].persistant) && (source_state != AL_PLAYING)) {
 			to_play_from.channels[i].persistant = persistant;
@@ -101,7 +102,6 @@ audioplayer_PlaySoundWithVolume(struct AudioPlayer to_play_from, unsigned int sa
 	}
 	return i;
 }
-
 
 void
 audioplayer_StopSound(struct AudioPlayer to_play_from, unsigned int channel) {
