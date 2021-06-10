@@ -1,5 +1,5 @@
 # Tetris
-![alt text](screenshot_1.png "screenshot")
+![alt text](screenshot_1.PNG "screenshot")
 
 
 ## Building
