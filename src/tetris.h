@@ -61,10 +61,14 @@ struct Tetris {
 
 	int lines_cleared;
 
+	int rows_cleared;
+
 	float line_cleared_show_off_acc;
 	float line_cleared_show_off_time;
 	bool line_show_off;
 	int lines_to_show_off[4];
+
+	bool row_cleared[PLAYFIELD_Y_MIN];
 };
 
 struct Tetris tetris_Init(float game_time);

@@ -102,7 +102,7 @@ tetris_Init(float game_time) {
 	    .level         = 1,
 	    .paused        = false,
 	    .fast_drop_on  = false,
-		.line_cleared_show_off_time = 5.0f,
+		.line_cleared_show_off_time = .75f,
 		.line_show_off = false};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
@@ -157,6 +157,19 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 	if(to_update->line_show_off) {
 		to_update->line_cleared_show_off_acc += game_time;
 		if(to_update->line_cleared_show_off_acc > to_update->line_cleared_show_off_time) {
+			for(int i = 0; i < PLAYFIELD_Y_MIN; ++i) {
+				if(to_update->row_cleared[i]) {
+					for(int x = 0; x < PLAYFIELD_X; ++x) {
+						to_update->playfield[i + PLAYFIELD_Y_MIN][x] = BLOCKCOLOR_EMPTY;
+					}
+					for(int above = i; above > 0; above--) {
+						for(int above_x = 0; above_x < PLAYFIELD_X; ++above_x) {
+							to_update->playfield[above + PLAYFIELD_Y_MIN][above_x] =
+								to_update->playfield[above - 1 + PLAYFIELD_Y_MIN][above_x];
+						}
+					}
+				}
+			}
 		} else {
 			printf("SHOW OFF %f\n", to_update->line_cleared_show_off_acc);
 			return;
@@ -272,16 +285,15 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 		to_update->hard_dropped = false;
 	}
 
-	bool row_cleared[PLAYFIELD_Y_MIN];
 	for(int i = 0; i < PLAYFIELD_Y_MIN; ++i) {
-		row_cleared[i] = true;
+		to_update->row_cleared[i] = true;
 	}
 
 	// check board
 	for(int y = PLAYFIELD_Y_MIN; y < PLAYFIELD_Y; ++y) {
 		for(int x = 0; x < PLAYFIELD_X; ++x) {
 			if(to_update->playfield[y][x] == BLOCKCOLOR_EMPTY) {
-				row_cleared[y - PLAYFIELD_Y_MIN] = false;
+				to_update->row_cleared[y - PLAYFIELD_Y_MIN] = false;
 				break;
 			}
 		}
@@ -292,33 +304,25 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 		to_update->lines_to_show_off[i] = -1;
 	}
 
-	int rows_cleared = 0;
+	to_update->rows_cleared = 0;
 	for(int i = 0; i < PLAYFIELD_Y_MIN; ++i) {
-		if(row_cleared[i]) {
-			to_update->lines_to_show_off[rows_cleared] = i;
-			++rows_cleared;
-			for(int x = 0; x < PLAYFIELD_X; ++x) {
-				to_update->playfield[i + PLAYFIELD_Y_MIN][x] = BLOCKCOLOR_EMPTY;
-			}
-			for(int above = i; above > 0; above--) {
-				for(int above_x = 0; above_x < PLAYFIELD_X; ++above_x) {
-					to_update->playfield[above + PLAYFIELD_Y_MIN][above_x] =
-					    to_update->playfield[above - 1 + PLAYFIELD_Y_MIN][above_x];
-				}
-			}
+		if(to_update->row_cleared[i]) {
+			to_update->lines_to_show_off[to_update->rows_cleared] = i;
+			++to_update->rows_cleared;
 		}
 	}
 
-	if(rows_cleared) {
+	if(to_update->rows_cleared) {
 		to_update->line_show_off = true;
 		to_update->line_cleared_show_off_acc = 0.0f;
+		audioplayer_PlaySoundWithVolume(ap, 2, .5, false, false);
 	}
 
 	
 
 	int lines_update = 0;
 	int score_update = 0;
-	switch(rows_cleared) {
+	switch(to_update->rows_cleared) {
 	case 1:
 		lines_update = 1;
 		score_update = 40 * (to_update->level + 1);

@@ -59,14 +59,15 @@ wmain() {
 	struct AudioPlayer ap = audioplayer_Init();
 	audioplayer_LoadSample(&ap, ASSET_DIR "beep_0.wav", 0);
 	audioplayer_LoadSample(&ap, ASSET_DIR "beep_1.wav", 1);
-	audioplayer_LoadSample(&ap, ASSET_DIR "music_0.wav", 2);
+	audioplayer_LoadSample(&ap, ASSET_DIR "beep_2.wav", 2);
+	audioplayer_LoadSample(&ap, ASSET_DIR "music_0.wav", 3);
 
 	double start_time      = glfwGetTime();
 	double game_start_time = glfwGetTime();
 
 	glfwSetKeyCallback(win.window, key_callback);
 
-	unsigned int bg = audioplayer_PlaySoundWithVolume(ap, 2, .001f, false, true);
+	unsigned int bg = audioplayer_PlaySoundWithVolume(ap, 3, .001f, false, true);
 
 	while(window_Active(win)) {
 		glfwPollEvents();
