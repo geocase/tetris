@@ -60,6 +60,11 @@ struct Tetris {
 	bool fast_drop_on;
 
 	int lines_cleared;
+
+	float line_cleared_show_off_acc;
+	float line_cleared_show_off_time;
+	bool line_show_off;
+	int lines_to_show_off[4];
 };
 
 struct Tetris tetris_Init(float game_time);

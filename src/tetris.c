@@ -101,7 +101,9 @@ tetris_Init(float game_time) {
 	    .lines_cleared = 0,
 	    .level         = 1,
 	    .paused        = false,
-	    .fast_drop_on  = false};
+	    .fast_drop_on  = false,
+		.line_cleared_show_off_time = 5.0f,
+		.line_show_off = false};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
 			t.playfield[y][x] = BLOCKCOLOR_EMPTY;
@@ -152,6 +154,16 @@ tetris_LevelUp(struct Tetris* to_level_up) {
 
 void
 tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float game_time) {
+	if(to_update->line_show_off) {
+		to_update->line_cleared_show_off_acc += game_time;
+		if(to_update->line_cleared_show_off_acc > to_update->line_cleared_show_off_time) {
+		} else {
+			printf("SHOW OFF %f\n", to_update->line_cleared_show_off_acc);
+			return;
+		}
+	}
+
+
 	float volume = .01f;
 	if(to_update->reset_key.just_pressed) {
 		if(!to_update->reset_key.is_pressed) {
@@ -275,9 +287,15 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 		}
 	}
 
+	// clear lines to show off
+	for(int i = 0; i < 4; ++i) {
+		to_update->lines_to_show_off[i] = -1;
+	}
+
 	int rows_cleared = 0;
 	for(int i = 0; i < PLAYFIELD_Y_MIN; ++i) {
 		if(row_cleared[i]) {
+			to_update->lines_to_show_off[rows_cleared] = i;
 			++rows_cleared;
 			for(int x = 0; x < PLAYFIELD_X; ++x) {
 				to_update->playfield[i + PLAYFIELD_Y_MIN][x] = BLOCKCOLOR_EMPTY;
@@ -290,6 +308,13 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 			}
 		}
 	}
+
+	if(rows_cleared) {
+		to_update->line_show_off = true;
+		to_update->line_cleared_show_off_acc = 0.0f;
+	}
+
+	
 
 	int lines_update = 0;
 	int score_update = 0;

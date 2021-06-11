@@ -22,11 +22,30 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 	    color_Normal(0, 0, 0, 255, 255));
 
 	for(int y = PLAYFIELD_Y_MIN; y < PLAYFIELD_Y; ++y) {
+		bool is_show_off_line = false;
+		for(int i = 0; i < 4; ++i) {
+			if(to_render_from.lines_to_show_off[i] == -1) {
+				break;
+			}
+			printf("IS SHOW OFF LINE %d, %d\n", to_render_from.lines_to_show_off[i] + PLAYFIELD_Y_MIN, y);
+			if(to_render_from.lines_to_show_off[i] + PLAYFIELD_Y_MIN == y) {
+				is_show_off_line = true;
+				break;
+			}
+		}
 		for(int x = 0; x < PLAYFIELD_X; ++x) {
 			float x_start_pos = x_padding + (block_size * x) + (x * x_offset);
 			float y_start_pos = y_padding + (block_size * (y - 20)) + ((y - 20) * y_offset);
 			Color_t to_draw   = to_render_from.color_defs[to_render_from.playfield[y][x]];
 			renderer_DrawQuad(render_with, x_start_pos, y_start_pos, block_size, block_size, to_draw);
+
+			if(is_show_off_line) {
+				printf(" SHOW OFF LINE \n");
+				to_draw = color_Normal(1, 1, 1, 1, 1);
+				renderer_DrawQuad(render_with, x_start_pos, y_start_pos, block_size, block_size, to_draw);
+			}
+
+
 
 			// draw piece
 			if(to_render_from.piece_x <= x && to_render_from.piece_x + 3 >= x) {
