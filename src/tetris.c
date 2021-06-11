@@ -102,12 +102,15 @@ tetris_Init(float game_time) {
 	    .level                      = 1,
 	    .paused                     = false,
 	    .fast_drop_on               = false,
-	    .line_cleared_show_off_time = .75f,
+	    .line_cleared_show_off_time = .5f,
 	    .line_show_off              = false};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
 			t.playfield[y][x] = BLOCKCOLOR_EMPTY;
 		}
+	}
+	for(int i = 0; i < 4; ++i) {
+		t.lines_to_show_off[i] = -1;
 	}
 	return t;
 }
@@ -314,7 +317,7 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 	if(to_update->rows_cleared) {
 		to_update->line_show_off             = true;
 		to_update->line_cleared_show_off_acc = 0.0f;
-		audioplayer_PlaySoundWithVolume(ap, 2, .5, false, false);
+		audioplayer_PlaySoundWithVolume(ap, 2, .1, false, false);
 	}
 
 	int lines_update = 0;
