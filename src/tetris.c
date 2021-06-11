@@ -92,18 +92,18 @@ tetris_Init(float game_time) {
 	         color_Normal(227, 66, 245, 255, 255),
 	         color_Normal(66, 245, 96, 255, 255),
 	         color_Normal(255, 0, 0, 255, 255)},
-	    .update_acc    = 0,
-	    .speed         = .75f, // once per second to start
-	    .piece_x       = 3,
-	    .piece_y       = 20,
-	    .current_piece = tetrimino_Init(rand() % BT_MAX),
-	    .game_lost     = false,
-	    .lines_cleared = 0,
-	    .level         = 1,
-	    .paused        = false,
-	    .fast_drop_on  = false,
-		.line_cleared_show_off_time = .75f,
-		.line_show_off = false};
+	    .update_acc                 = 0,
+	    .speed                      = .75f, // once per second to start
+	    .piece_x                    = 3,
+	    .piece_y                    = 20,
+	    .current_piece              = tetrimino_Init(rand() % BT_MAX),
+	    .game_lost                  = false,
+	    .lines_cleared              = 0,
+	    .level                      = 1,
+	    .paused                     = false,
+	    .fast_drop_on               = false,
+	    .line_cleared_show_off_time = .75f,
+	    .line_show_off              = false};
 	for(int x = 0; x < PLAYFIELD_X; ++x) {
 		for(int y = 0; y < PLAYFIELD_Y; ++y) {
 			t.playfield[y][x] = BLOCKCOLOR_EMPTY;
@@ -165,7 +165,7 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 					for(int above = i; above > 0; above--) {
 						for(int above_x = 0; above_x < PLAYFIELD_X; ++above_x) {
 							to_update->playfield[above + PLAYFIELD_Y_MIN][above_x] =
-								to_update->playfield[above - 1 + PLAYFIELD_Y_MIN][above_x];
+							    to_update->playfield[above - 1 + PLAYFIELD_Y_MIN][above_x];
 						}
 					}
 				}
@@ -175,7 +175,6 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 			return;
 		}
 	}
-
 
 	float volume = .01f;
 	if(to_update->reset_key.just_pressed) {
@@ -313,12 +312,10 @@ tetris_Update(struct Tetris* to_update, /*hack*/ struct AudioPlayer ap, float ga
 	}
 
 	if(to_update->rows_cleared) {
-		to_update->line_show_off = true;
+		to_update->line_show_off             = true;
 		to_update->line_cleared_show_off_acc = 0.0f;
 		audioplayer_PlaySoundWithVolume(ap, 2, .5, false, false);
 	}
-
-	
 
 	int lines_update = 0;
 	int score_update = 0;

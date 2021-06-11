@@ -43,8 +43,6 @@ paint_TetrisPlayfield(struct Renderer render_with, struct Tetris to_render_from)
 				renderer_DrawQuad(render_with, x_start_pos, y_start_pos, block_size, block_size, to_draw);
 			}
 
-
-
 			// draw piece
 			if(to_render_from.piece_x <= x && to_render_from.piece_x + 3 >= x) {
 				if(to_render_from.piece_y <= y && to_render_from.piece_y + 3 >= y) {
